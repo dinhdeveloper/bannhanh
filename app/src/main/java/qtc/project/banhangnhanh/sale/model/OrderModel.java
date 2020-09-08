@@ -15,6 +15,7 @@ public class OrderModel extends BaseResponseModel {
     private String order_created_date;
     private String order_status;
     private String order_total;
+    private String order_direct_discount;
     private String employee_id;
     private String employee_fullname;
     private String employee_email;
@@ -35,8 +36,17 @@ public class OrderModel extends BaseResponseModel {
     private String customer_level_code;
     private String customer_level_name;
     private String customer_level_discount;
+    private String customer_level_image;
     private String customer_level_description;
     private OrderDetailModel[] order_detail;
+
+        public String getOrder_direct_discount() {
+            return order_direct_discount;
+        }
+
+        public void setOrder_direct_discount(String order_direct_discount) {
+            this.order_direct_discount = order_direct_discount;
+        }
 
     public String getId_order() {
         return id_order;
@@ -68,6 +78,14 @@ public class OrderModel extends BaseResponseModel {
 
     public void setOrder_created_date(String order_created_date) {
         this.order_created_date = order_created_date;
+    }
+
+    public String getCustomer_level_image() {
+        return customer_level_image;
+    }
+
+    public void setCustomer_level_image(String customer_level_image) {
+        this.customer_level_image = customer_level_image;
     }
 
     public String getEmployee_code() {

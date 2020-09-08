@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.adapter.history.ListOrderDetailAdapter;
@@ -24,7 +25,7 @@ public class FragmentOrderDetailEmployeeView extends BaseView<FragmentOrderDetai
     public void init(HomeActivity activity, FragmentOrderDetailEmployeeViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
     }
 

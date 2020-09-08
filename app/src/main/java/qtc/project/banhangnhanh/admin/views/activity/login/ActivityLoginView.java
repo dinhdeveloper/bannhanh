@@ -8,12 +8,13 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
 import b.laixuantam.myaarlibrary.helper.AppUtils;
 import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
-import b.laixuantam.myaarlibrary.widgets.scaletouchlistener.ScaleTouchListener;
+import b.laixuantam.myaarlibrary.widgets.touch_view_anim.scaletouchlistener.ScaleTouchListener;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.LoginActivity;
 
@@ -102,6 +103,11 @@ public class ActivityLoginView extends BaseView<ActivityLoginView.UiContainer> i
                 doLogin();
             }
         });
+
+        ui.tvTraiNghiem.setOnClickListener(v -> {
+            if (callback!=null)
+                callback.goToFragmentReview();
+        });
     }
 
 
@@ -139,6 +145,9 @@ public class ActivityLoginView extends BaseView<ActivityLoginView.UiContainer> i
     }
 
     public class UiContainer extends BaseUiContainer {
+        @UiElement(R.id.activityLogin)
+        public LinearLayout activityLogin;
+
         @UiElement(R.id.edtLoginIdShop)
         public EditText edtLoginIdShop;
 
@@ -150,5 +159,10 @@ public class ActivityLoginView extends BaseView<ActivityLoginView.UiContainer> i
 
         @UiElement(R.id.btnLoginButton)
         public LinearLayout btnLoginButton;
+
+        @UiElement(R.id.tvTraiNghiem)
+        public TextView tvTraiNghiem;
+
+
     }
 }

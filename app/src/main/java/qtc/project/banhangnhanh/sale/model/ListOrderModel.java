@@ -11,6 +11,7 @@ public class ListOrderModel implements Serializable {
     private String priceProduct;
     private String inventory;
     private String totalStore;
+    private String positionItem;
 
     public String getId() {
         return id;
@@ -74,5 +75,13 @@ public class ListOrderModel implements Serializable {
 
     public void setTotalStore(String totalStore) {
         this.totalStore = totalStore;
+    }
+
+    public String getPosition_item() {
+        return positionItem;
+    }
+
+    public void setPosition_item(String positionItem) {
+        this.positionItem = positionItem;
     }
 }

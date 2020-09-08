@@ -13,6 +13,18 @@
         android:layout_height="match_parent">
         <include layout="@layout/layout_header_pos"/>
 
+        <TextView
+            android:id="@+id/tvStore_end"
+            android:textSize="16sp"
+            android:textColor="#FF6D4C"
+            android:textStyle="bold"
+            android:paddingVertical="@dimen/dp10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            tools:text="@string/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_marginVertical="@dimen/dp15"
@@ -25,9 +37,9 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:background="@drawable/custom_background_search"
+                android:background="@drawable/custom_background_search_level_detail"
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="40dp">
                 <ImageView
                     android:id="@+id/image_search"
                     android:layout_margin="@dimen/dp5"
@@ -37,12 +49,13 @@
                     android:layout_height="24dp"/>
                 <EditText
                     android:id="@+id/edit_filter"
+                    android:layout_gravity="center"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:background="@color/white"
                     android:layout_marginHorizontal="5dp"
                     android:layout_weight="1"
-                    android:hint="Tên sản phẩm..."
+                    android:hint="Tên sản phẩm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <ImageView
@@ -59,8 +72,8 @@
                 android:id="@+id/quetMV"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_barcode_home"
-                android:layout_width="100dp"
-                android:layout_height="45dp"/>
+                android:layout_width="80dp"
+                android:layout_height="42dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -118,6 +131,9 @@
             </LinearLayout>
             <!--end-->
             <LinearLayout
+                android:id="@+id/layoutShowCustomer"
+                android:visibility="gone"
+                tools:visibility="visible"
                 android:layout_marginVertical="5dp"
                 android:layout_marginHorizontal="@dimen/dp10"
                 android:orientation="horizontal"
@@ -129,9 +145,10 @@
                     android:background="@drawable/custom_item_name_in_order_home"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp">
+                    android:layout_height="32dp">
                     <TextView
                         android:id="@+id/nameCustomers"
+                        android:hint="Chọn khách hàng"
                         android:layout_weight="1"
                         android:layout_marginHorizontal="@dimen/dp5"
                         android:layout_marginVertical="@dimen/dp5"
@@ -140,14 +157,15 @@
                         android:textSize="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
+
                     <ImageView
                         android:id="@+id/imageClose"
+                        android:layout_width="18sp"
+                        android:layout_height="18sp"
+                        android:layout_gravity="center"
                         android:layout_marginRight="@dimen/dp5"
                         android:background="@drawable/custom_background_close_order"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_close_while_24"
-                        android:layout_width="@dimen/dp20"
-                        android:layout_height="@dimen/dp20"/>
+                        android:src="@drawable/ic_close_while_24" />
                 </LinearLayout>
                 <TextView
                     android:id="@+id/nameLevelCuss"
@@ -178,18 +196,19 @@
                     android:layout_height="wrap_content"
                     tools:visibility="visible">
 
-                    <TextView
-                        android:layout_marginVertical="@dimen/dp5"
-                        android:layout_marginHorizontal="@dimen/dp10"
-                        android:textSize="@dimen/dp15"
-                        android:textColor="@color/colorCCC"
-                        android:text="Chọn sản phẩm: "
-                        android:textStyle="bold"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+<!--                    <TextView-->
+<!--                        android:layout_marginVertical="@dimen/dp5"-->
+<!--                        android:layout_marginHorizontal="@dimen/dp10"-->
+<!--                        android:textSize="@dimen/dp15"-->
+<!--                        android:textColor="@color/colorCCC"-->
+<!--                        android:text="Chọn sản phẩm: "-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"/>-->
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_view_list_order"
+                        android:layout_marginVertical="@dimen/dp5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -200,6 +219,7 @@
                     <!--                android:layout_height="2dp"/>-->
                     <LinearLayout
                         android:id="@+id/layoutpriceTemp"
+                        android:paddingVertical="@dimen/dp5"
                         android:layout_marginHorizontal="@dimen/dp10"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -244,6 +264,38 @@
                             android:id="@+id/priceSale"
                             android:layout_gravity="center"
                             android:gravity="right"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dp15"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:paddingVertical="@dimen/dp5"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="Giảm trực tiếp: "
+                            android:textColor="@color/colorCCC"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <b.laixuantam.myaarlibrary.widgets.currencyedittext.CurrencyEditText
+                            android:id="@+id/tienGiamTT"
+                            android:imeOptions="actionDone"
+                            android:hint="Nhập tiền giảm"
+                            android:paddingLeft="@dimen/dp20"
+                            android:background="#F2F2F2"
+                            android:padding="4dp"
+                            android:layout_gravity="center"
+                            android:gravity="right|center"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="@dimen/dp15"
@@ -313,21 +365,26 @@
 
         <include layout="@layout/layout_disable_list" />
 
-        <ImageView
-            android:id="@+id/image_close_layout_scan"
-            android:layout_margin="@dimen/dp20"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_delete_noti"
-            android:layout_width="30dp"
-            android:layout_height="30dp"/>
-
-        <FrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="300dp"
+        <RelativeLayout
             android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
-            android:layout_height="200dp"
-            android:visibility="visible" />
+            android:layout_width="300dp"
+            android:layout_height="210dp">
+            <FrameLayout
+                android:id="@+id/content_frame"
+                android:layout_width="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="200dp"
+                android:visibility="visible" />
+            <ImageView
+                android:id="@+id/image_close_layout_scan"
+                android:layout_margin="6dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_delete_noti"
+                android:layout_width="30dp"
+                android:padding="@dimen/dp5"
+                android:layout_height="30dp"/>
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>

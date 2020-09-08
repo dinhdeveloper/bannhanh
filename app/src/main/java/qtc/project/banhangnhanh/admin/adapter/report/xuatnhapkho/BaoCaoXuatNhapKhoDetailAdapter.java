@@ -86,7 +86,7 @@ public class BaoCaoXuatNhapKhoDetailAdapter extends RecyclerView.Adapter<Recycle
             itemViewHolder.id_order.setText(list.get(position-1).getPack_id_code());
             itemViewHolder.tonkho.setTextColor(Color.parseColor("#FF6D4C"));
             itemViewHolder.tonkho.setText(list.get(position-1).getQuantity_storage());
-            itemViewHolder.price.setText(decimalFormat.format(Integer.parseInt(list.get(position-1).getImport_price())));
+            itemViewHolder.price.setText(decimalFormat.format(Double.valueOf(list.get(position-1).getImport_price())));
         }
     }
 

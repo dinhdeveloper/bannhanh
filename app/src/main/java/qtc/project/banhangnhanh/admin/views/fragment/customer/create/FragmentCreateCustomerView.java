@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.adapter.levelcustomer.LevelCustomerChooseAdapter;
@@ -31,6 +32,7 @@ public class FragmentCreateCustomerView extends BaseView<FragmentCreateCustomerV
     public void init(HomeActivity activity, FragmentCreateCustomerViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
     }
     private void onClick() {

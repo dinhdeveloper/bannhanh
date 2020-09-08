@@ -107,7 +107,7 @@ public class FragmentCreateLevelCustomer extends BaseFragment<FragmentCreateLeve
                 @Override
                 public void onSuccess(BaseResponseModel<LevelCustomerModel> body) {
                     if (body.getSuccess().equals("true")) {
-                        Toast.makeText(activity, "" + body.getMessage(), Toast.LENGTH_SHORT).show();
+                        view.showPopup();
                     } else if (body.getSuccess().equals("false")) {
                         Toast.makeText(activity, "" + body.getMessage(), Toast.LENGTH_SHORT).show();
                     }

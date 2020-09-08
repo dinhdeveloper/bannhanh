@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 
@@ -17,7 +18,7 @@ public class FragmentEmployeeManagerView extends BaseView<FragmentEmployeeManage
     public void init(HomeActivity activity, FragmentEmployeeManagerViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
     }
 

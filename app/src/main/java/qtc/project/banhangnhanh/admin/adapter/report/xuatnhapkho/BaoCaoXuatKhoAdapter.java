@@ -95,7 +95,7 @@ public class BaoCaoXuatKhoAdapter extends RecyclerView.Adapter<RecyclerView.View
             //int soluongxuat = Integer.parseInt(list.get(position - 1).getQuantity_order()) - Integer.parseInt(list.get(position - 1).getQuantity_storage());
 
             itemViewHolder.tonkho.setText("-" + list.get(position-1).getOrder_product_quantity());
-            itemViewHolder.price.setText(decimalFormat.format(Integer.parseInt(list.get(position - 1).getOrder_product_price())));
+            itemViewHolder.price.setText(decimalFormat.format(Double.valueOf(list.get(position - 1).getOrder_product_price())));
         }
     }
 

@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.adapter.history.ListOrderDetailAdapter;
@@ -28,7 +29,7 @@ public class FragmentOrderDetailView extends BaseView<FragmentOrderDetailView.UI
     public void init(HomeActivity activity, FragmentOrderDetailViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
     }
 
@@ -44,7 +45,7 @@ public class FragmentOrderDetailView extends BaseView<FragmentOrderDetailView.UI
 
     @Override
     public void sentDataToView(OrderCustomerModel model) {
-        try {
+        //try {
             if (model != null) {
                 ui.name_customer.setText(model.getCustomer_fullname());
                 ui.id_order.setText(model.getOrder_id_code());
@@ -73,22 +74,23 @@ public class FragmentOrderDetailView extends BaseView<FragmentOrderDetailView.UI
             String pattern = "###,###.###";
             DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
-            int tongtien = Integer.parseInt(model.getOrder_total());
-            int tamtinh = 0;
+            long tongtien = Long.valueOf(model.getOrder_total());
+            long tamtinh = 0;
             for (int i = 0; i < model.getListOrderDetailModel().size(); i++) {
-                int tien_one_item = Integer.parseInt(model.getListOrderDetailModel().get(i).getPrice()) * Integer.parseInt(model.getListOrderDetailModel().get(i).getQuantity());
+                long tien_one_item = (long) (Long.valueOf(model.getListOrderDetailModel().get(i).getPrice()) * Double.valueOf(model.getListOrderDetailModel().get(i).getQuantity()));
                 tamtinh += tien_one_item;
             }
 
-            ui.priceGiam.setText(decimalFormat.format(tamtinh - tongtien) + " VNĐ");
-            ui.priceTotal.setText(decimalFormat.format(Integer.parseInt(model.getOrder_total())) + " VNĐ");
+            ui.priceGiam.setText(decimalFormat.format(tamtinh - tongtien-Long.valueOf(model.getOrder_direct_discount())) + " VNĐ");
+            ui.priceTotal.setText(decimalFormat.format(Long.valueOf(model.getOrder_total())) + " VNĐ");
             //int tientemp = Integer.parseInt(model.getOrder_total()) + Integer.parseInt(model.getCustomer_level_discount());
             ui.priceTemp.setText(decimalFormat.format(tamtinh) + " VNĐ");
+            ui.priceGiamTT.setText(decimalFormat.format(Long.valueOf(model.getOrder_direct_discount())) + " VNĐ");
 
-        } catch (Exception e) {
-            Log.e("Ex", e.getMessage());
-
-        }
+//        } catch (Exception e) {
+//            Log.e("Ex", e.getMessage());
+//
+//        }
     }
 
     @Override
@@ -139,6 +141,9 @@ public class FragmentOrderDetailView extends BaseView<FragmentOrderDetailView.UI
 
         @UiElement(R.id.priceGiam)
         public TextView priceGiam;
+
+        @UiElement(R.id.priceGiamTT)
+        public TextView priceGiamTT;
 
         @UiElement(R.id.priceTotal)
         public TextView priceTotal;

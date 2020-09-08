@@ -15,7 +15,7 @@ public class NotificationManagerActivityView extends BaseView<NotificationManage
 
     @Override
     public void setTitleHeader(String title) {
-        ui.tvTitleHeader.setText(title);
+        ui.title_header.setText(title);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class NotificationManagerActivityView extends BaseView<NotificationManage
 
     public static class UIContainer extends BaseUiContainer {
 
-        @UiElement(R.id.tvTitleHeader)
-        public TextView tvTitleHeader;
+        @UiElement(R.id.title_header)
+        public TextView title_header;
 
         @UiElement(R.id.LayoutBaseMainFragmentActivity)
         public FrameLayout LayoutBaseMainFragmentActivity;

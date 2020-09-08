@@ -97,6 +97,7 @@
             </LinearLayout>
             <ImageView
                 android:id="@+id/image_level"
+                android:src="@drawable/no_image_full"
                 android:layout_gravity="center"
                 android:layout_marginVertical="@dimen/dp20"
                 android:layout_width="210dp"

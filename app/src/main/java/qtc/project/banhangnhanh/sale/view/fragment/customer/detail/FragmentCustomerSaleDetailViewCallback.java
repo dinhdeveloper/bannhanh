@@ -6,4 +6,6 @@ public interface FragmentCustomerSaleDetailViewCallback {
     void onBackP();
 
     void updateCustomer(CustomerModel customerModel, String id);
+
+    void createCustomer(CustomerModel customerModel);
 }

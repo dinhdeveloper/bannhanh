@@ -33,6 +33,7 @@ public class OrderCustomerModel extends BaseResponseModel{
     private String customer_level_discount;
     private String customer_level_image;
     private String customer_level_description;
+    private String order_direct_discount;
     private OrderDetailModel[] order_detail;
 
     public List<OrderDetailModel> getListOrderDetailModel() {
@@ -44,6 +45,14 @@ public class OrderCustomerModel extends BaseResponseModel{
             list.addAll(Arrays.asList(order_detail));
             return list;
         }
+    }
+
+    public String getOrder_direct_discount() {
+        return order_direct_discount;
+    }
+
+    public void setOrder_direct_discount(String order_direct_discount) {
+        this.order_direct_discount = order_direct_discount;
     }
 
     public String getId_order() {

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -14,21 +15,21 @@ import b.laixuantam.myaarlibrary.dependency.AppProvider;
 import b.laixuantam.myaarlibrary.widgets.superadapter.SuperAdapter;
 import b.laixuantam.myaarlibrary.widgets.superadapter.SuperViewHolder;
 import qtc.project.banhangnhanh.R;
+import qtc.project.banhangnhanh.admin.dialog.option.OptionModel;
 import qtc.project.banhangnhanh.helper.Consts;
 import qtc.project.banhangnhanh.sale.model.ProductModel;
 
-public class ProductProductAdapter extends SuperAdapter<ProductModel> {
+public class ProductProductAdapter extends SuperAdapter<OptionModel> {
 
     ProductProductAdapterListener listener;
     boolean isChecked = true;
-    public ProductProductAdapter(Context context, List<ProductModel> items) {
+
+    public ProductProductAdapter(Context context, List<OptionModel> items) {
         super(context, items, R.layout.custom_item_product_sale);
     }
 
     public interface ProductProductAdapterListener {
-        void onItemClick(ProductModel model);
-
-        void onRequestLoadMoreProduct();
+        void onItemClick(OptionModel model);
     }
 
     public void setListener(ProductProductAdapterListener listener) {
@@ -36,7 +37,7 @@ public class ProductProductAdapter extends SuperAdapter<ProductModel> {
     }
 
     @Override
-    public void onBind(SuperViewHolder holder, int viewType, int layoutPosition, ProductModel item) {
+    public void onBind(SuperViewHolder holder, int viewType, int layoutPosition, OptionModel model) {
         ImageView imageProduct = holder.findViewById(R.id.imageProduct);
         ImageView imvTamHetHang = holder.findViewById(R.id.imvTamHetHang);
         ImageView checkedProduct = holder.findViewById(R.id.checkedProduct);
@@ -47,71 +48,35 @@ public class ProductProductAdapter extends SuperAdapter<ProductModel> {
         TextView warehouseProduct = holder.findViewById(R.id.warehouseProduct);
         CardView item_product = holder.findViewById(R.id.item_product);
 
-        if (!item.getListDataProduct().isEmpty() && Integer.valueOf(item.getTotal_stock())>0){
+        ProductModel item = (ProductModel) model.getDtaCustom();
+
+        //checkedProduct.setVisibility(View.VISIBLE);
+        //checkedProduct.setVisibility(View.GONE);
+        if (!item.getListDataProduct().isEmpty() && Double.valueOf(item.getTotal_stock()) > 0) {
             layoutConHang.setVisibility(View.VISIBLE);
             imvTamHetHang.setVisibility(View.GONE);
-            AppProvider.getImageHelper().displayImage(Consts.HOST_API + item.getImage(), imageProduct, null, R.drawable.imageloading);
+            AppProvider.getImageHelper().displayImage(Consts.HOST_API + item.getImage(), imageProduct, null, R.drawable.no_image_full);
             nameProduct.setText(item.getName().toString());
             String pattern = "###,###.###";
             DecimalFormat decimalFormat = new DecimalFormat(pattern);
-            if (!item.getSale_price().isEmpty()){
-                priceProduct.setText(decimalFormat.format(Integer.parseInt(item.getSale_price())) + " đ");
+            if (!item.getSale_price().isEmpty()) {
+                priceProduct.setText(decimalFormat.format(Double.valueOf(item.getSale_price())) + " đ");
             }
-            warehouseProduct.setText(decimalFormat.format(Integer.valueOf(item.getTotal_stock())));
+            warehouseProduct.setText(decimalFormat.format(Double.valueOf(item.getTotal_stock())));
 
-            item_product.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isChecked) {
-                        if (listener != null) {
-                            listener.onItemClick(item);
-                        }
-                        //checkedProduct.setVisibility(View.VISIBLE);
-                    } else {
-                        if (listener != null) {
-                            listener.onItemClick(item);
-                        }
-                        //checkedProduct.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-        }
-        else {
-            AppProvider.getImageHelper().displayImage(Consts.HOST_API + item.getImage(), imageProduct, null, R.drawable.imageloading);
+        } else {
+            AppProvider.getImageHelper().displayImage(Consts.HOST_API + item.getImage(), imageProduct, null, R.drawable.no_image_full);
             nameProduct.setText(item.getName().toString());
             priceProduct.setText("Hết hàng");
             warehouseProduct.setText("Hết hàng");
             String pattern = "###,###.###";
-            DecimalFormat decimalFormat = new DecimalFormat(pattern);
-//            if (!item.getSale_price().isEmpty()){
-//                priceProduct.setText(decimalFormat.format(Integer.parseInt(item.getSale_price())) + " đ");
-//            }
-//            warehouseProduct.setText(decimalFormat.format(Integer.valueOf(item.getTotal_stock())));
-//
-            //layoutConHang.setVisibility(View.GONE);
             imvTamHetHang.setVisibility(View.VISIBLE);
 
-            item_product.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isChecked) {
-                        if (listener != null) {
-                            listener.onItemClick(item);
-                        }
-                        //checkedProduct.setVisibility(View.VISIBLE);
-                    } else {
-                        if (listener != null) {
-                            listener.onItemClick(item);
-                        }
-                        //checkedProduct.setVisibility(View.GONE);
-                    }
-                }
-            });
         }
-        if (layoutPosition == getCount() - 1) {
-            if (listener != null)
-                listener.onRequestLoadMoreProduct();
-        }
+        item_product.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(model);
+            }
+        });
     }
 }

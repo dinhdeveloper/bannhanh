@@ -1,9 +1,13 @@
 package qtc.project.banhangnhanh.admin.views.fragment.levelcustomer.create;
 
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
@@ -33,6 +37,34 @@ public class FragmentCreateLevelCustomerView extends BaseView<FragmentCreateLeve
     public void setDataProductImage(String filePath) {
         image_level = filePath;
         AppProvider.getImageHelper().displayImage(filePath, ui.image_level, null, R.drawable.imageloading, false);
+    }
+
+    @Override
+    public void showPopup() {
+        LayoutInflater layoutInflater = activity.getLayoutInflater();
+        View popupView = layoutInflater.inflate(R.layout.alert_dialog_success, null);
+        TextView title_text = popupView.findViewById(R.id.title_text);
+        TextView content_text = popupView.findViewById(R.id.content_text);
+        Button custom_confirm_button = popupView.findViewById(R.id.custom_confirm_button);
+
+        title_text.setText("Xác nhận");
+        content_text.setText("Bạn đã tạo mới thành công!");
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        alert.setView(popupView);
+        AlertDialog dialog = alert.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        custom_confirm_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ui.id_level.setText("");
+                ui.name_level_customer.setText("");
+                ui.discount_level.setText("");
+                ui.description_level.setText("");
+                dialog.dismiss();
+            }
+        });
     }
 
     private void onClick() {

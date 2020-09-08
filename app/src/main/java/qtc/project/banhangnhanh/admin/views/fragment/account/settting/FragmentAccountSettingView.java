@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
-import b.laixuantam.myaarlibrary.widgets.scaletouchlistener.ScaleTouchListener;
+import b.laixuantam.myaarlibrary.widgets.touch_view_anim.scaletouchlistener.ScaleTouchListener;
 import qtc.project.banhangnhanh.R;
 
 public class FragmentAccountSettingView extends BaseView<FragmentAccountSettingView.UIContainer> implements FragmentAccountSettingViewInterface {
@@ -44,7 +44,7 @@ public class FragmentAccountSettingView extends BaseView<FragmentAccountSettingV
         @UiElement(R.id.btnBackHeader)
         public View btnBackHeader;
 
-        @UiElement(R.id.tvTitleHeader)
+        @UiElement(R.id.title_header)
         public TextView tvTitleHeader;
 
         @UiElement(R.id.btnProfileManager)

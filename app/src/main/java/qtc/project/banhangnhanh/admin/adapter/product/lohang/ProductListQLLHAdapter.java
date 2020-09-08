@@ -23,10 +23,11 @@ public class ProductListQLLHAdapter extends SuperAdapter<ProductListModel> {
         super(context, items, R.layout.custom_item_product_in_product_list_qllh);
     }
 
-    public interface  ProductListQLLHAdapterListener{
+    public interface ProductListQLLHAdapterListener {
         void setOnClick(ProductListModel model);
     }
-    public void setListener(ProductListQLLHAdapterListener listener){
+
+    public void setListener(ProductListQLLHAdapterListener listener) {
         this.listener = listener;
     }
 
@@ -37,14 +38,14 @@ public class ProductListQLLHAdapter extends SuperAdapter<ProductListModel> {
         TextView id_product = holder.findViewById(R.id.id_product);
         TextView name_product = holder.findViewById(R.id.name_product);
 
-        AppProvider.getImageHelper().displayImage(Consts.HOST_API+item.getImage(),image_product,null,R.drawable.imageloading);
+        AppProvider.getImageHelper().displayImage(Consts.HOST_API + item.getImage(), image_product, null, R.drawable.imageloading);
         id_product.setText(item.getId_code());
         name_product.setText(item.getName());
 
         layout_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (listener!=null){
+                if (listener != null) {
                     listener.setOnClick(item);
                 }
             }

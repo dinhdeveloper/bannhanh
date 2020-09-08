@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.admin.model.LevelCustomerModel;
@@ -25,6 +26,7 @@ public class FragmentLevelSaleCustomerView extends BaseView<FragmentLevelSaleCus
         this.callback = callback;
         ui.title_header.setText("Cấp độ khách hàng");
 
+        KeyboardUtils.setupUI(getView(),activity);
         ui.imvHome.setOnClickListener(v -> {
             if (callback!=null)
                 callback.goHome();
@@ -50,6 +52,9 @@ public class FragmentLevelSaleCustomerView extends BaseView<FragmentLevelSaleCus
                 if (callback!=null)
                     callback.goToLevelDetail(model);
             });
+        }else {
+            ui.recycler_view_list.setVisibility(View.GONE);
+            ui.layoutNone.setVisibility(View.VISIBLE);
         }
     }
 

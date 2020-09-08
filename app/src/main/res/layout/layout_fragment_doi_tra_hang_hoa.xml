@@ -112,8 +112,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/dp10"
-                        android:background="@drawable/custom_background_filter">
+                        android:layout_marginLeft="@dimen/dp10">
 
                         <ImageView
                             android:id="@+id/image_filter"

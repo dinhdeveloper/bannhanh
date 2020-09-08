@@ -48,10 +48,10 @@ public class OrderDetailAdapter extends SuperAdapter<OrderDetailModel> {
             quantityOrderDetail.setText("X"+item.getQuantity());
             String pattern = "###,###.###";
             DecimalFormat decimalFormat = new DecimalFormat(pattern);
-            priceOrderDetail.setText(decimalFormat.format(Integer.parseInt(item.getPrice())));
-
-            long allPriceItem = Long.valueOf(item.getPrice())* Long.valueOf(item.getQuantity());
+            priceOrderDetail.setText(decimalFormat.format(Double.valueOf(item.getPrice())));
+            long allPriceItem = (long) (Long.valueOf(item.getPrice())* Double.valueOf(item.getQuantity()));
             allPriceOrderDetail.setText(decimalFormat.format(allPriceItem));
+
         }
     }
 }

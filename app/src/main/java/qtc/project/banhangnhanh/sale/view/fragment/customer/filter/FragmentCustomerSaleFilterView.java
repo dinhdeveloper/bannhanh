@@ -10,12 +10,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.admin.model.CustomerModel;
@@ -32,6 +34,7 @@ public class FragmentCustomerSaleFilterView extends BaseView<FragmentCustomerSal
         this.activity = activity;
         this.callback = callback;
 
+        KeyboardUtils.setupUI(getView(),activity);
         ui.btnExit.setOnClickListener(v -> {
             if (callback!=null)
                 callback.onBackP();
@@ -87,6 +90,7 @@ public class FragmentCustomerSaleFilterView extends BaseView<FragmentCustomerSal
     }
 
     private void showEmptyList() {
+        Toast.makeText(activity, "Không có khách hàng cần tìm", Toast.LENGTH_SHORT).show();
     }
 
     private void initView(){

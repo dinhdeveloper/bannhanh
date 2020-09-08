@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:id="@+id/activityLogin"
+    android:background="@drawable/login_bg"
+    tools:context=".activity.LoginActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvQuayLai"
+            android:gravity="start"
+            android:text="Quay lại"
+            android:padding="@dimen/dp10"
+            android:textColor="@color/white"
+            android:drawableLeft="@drawable/ic_chevron_left_black_24dp"
+            android:drawableTint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <b.laixuantam.myaarlibrary.widgets.roundview.RoundLinearLayout
+                    app:rv_cornerRadius="8dp"
+                    app:rv_strokeWidth="1sp"
+                    app:rv_strokeColor="@color/white"
+                    android:layout_marginHorizontal="40dp"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <b.laixuantam.myaarlibrary.widgets.roundview.RoundTextView
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:text="Đăng nhập quản lý"
+                        android:layout_marginHorizontal="@dimen/dp20"
+                        android:gravity="center"
+                        android:padding="@dimen/dp20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/tvStoreAdmin"
+                        android:text="ABCXYZ"
+                        android:paddingHorizontal="5dp"
+                        android:drawablePadding="@dimen/dp10"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:textColor="@color/white"
+                        android:inputType="text"
+                        android:hint="Mã cửa hàng"
+                        android:textColorHint="@color/white"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/custom_edittext_background_login_admin"
+                        android:layout_marginVertical="@dimen/dp5"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp"/>
+
+
+                    <TextView
+                        android:id="@+id/tvUsernameAdmin"
+                        android:text="quanly"
+                        android:paddingHorizontal="5dp"
+                        android:drawablePadding="@dimen/dp10"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:textColor="@color/white"
+                        android:inputType="text"
+                        android:hint="Tên đăng nhập"
+                        android:textColorHint="@color/white"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/custom_edittext_background_login_admin"
+                        android:layout_marginVertical="@dimen/dp5"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp"/>
+
+                    <TextView
+                        android:id="@+id/tvPassAdmin"
+                        android:text="123456"
+                        android:paddingHorizontal="5dp"
+                        android:drawablePadding="@dimen/dp10"
+                        android:textColor="@color/white"
+                        android:inputType="textPassword"
+                        android:gravity="center"
+                        android:hint="Mật khẩu"
+                        android:textColorHint="@color/white"
+                        android:layout_gravity="center"
+                        android:background="@drawable/custom_edittext_background_login_admin"
+                        android:layout_marginVertical="@dimen/dp10"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/btnLoginAdmin"
+                        android:layout_marginBottom="@dimen/dp20"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/custom_background_button_login"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp">
+                        <TextView
+                            android:text="Đăng nhập"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/titleTabColor"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </b.laixuantam.myaarlibrary.widgets.roundview.RoundLinearLayout>
+
+
+                <b.laixuantam.myaarlibrary.widgets.roundview.RoundLinearLayout
+                    app:rv_cornerRadius="8dp"
+                    android:layout_marginTop="@dimen/dp10"
+                    app:rv_strokeWidth="1sp"
+                    app:rv_strokeColor="@color/white"
+                    android:layout_marginHorizontal="40dp"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <b.laixuantam.myaarlibrary.widgets.roundview.RoundTextView
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:text="Đăng nhập nhân viên"
+                        android:layout_marginHorizontal="@dimen/dp20"
+                        android:gravity="center"
+                        android:padding="@dimen/dp20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/tvStoreEmployee"
+                        android:text="ABCXYZ"
+                        android:paddingHorizontal="5dp"
+                        android:drawablePadding="@dimen/dp10"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:textColor="@color/white"
+                        android:inputType="text"
+                        android:hint="Mã cửa hàng"
+                        android:textColorHint="@color/white"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/custom_edittext_background_login_admin"
+                        android:layout_marginVertical="@dimen/dp5"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp"/>
+
+
+                    <TextView
+                        android:id="@+id/tvUsernameEmployee"
+                        android:text="nhanvien"
+                        android:paddingHorizontal="5dp"
+                        android:drawablePadding="@dimen/dp10"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:textColor="@color/white"
+                        android:inputType="text"
+                        android:hint="Tên đăng nhập"
+                        android:textColorHint="@color/white"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/custom_edittext_background_login_admin"
+                        android:layout_marginVertical="@dimen/dp5"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp"/>
+
+                    <TextView
+                        android:id="@+id/tvPassEmployee"
+                        android:text="123456"
+                        android:paddingHorizontal="5dp"
+                        android:drawablePadding="@dimen/dp10"
+                        android:textColor="@color/white"
+                        android:inputType="textPassword"
+                        android:gravity="center"
+                        android:hint="Mật khẩu"
+                        android:textColorHint="@color/white"
+                        android:layout_gravity="center"
+                        android:background="@drawable/custom_edittext_background_login_admin"
+                        android:layout_marginVertical="@dimen/dp10"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/btnLoginEmployee"
+                        android:layout_marginBottom="@dimen/dp20"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/custom_background_button_login"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp">
+                        <TextView
+                            android:text="Đăng nhập"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/titleTabColor"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </b.laixuantam.myaarlibrary.widgets.roundview.RoundLinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>

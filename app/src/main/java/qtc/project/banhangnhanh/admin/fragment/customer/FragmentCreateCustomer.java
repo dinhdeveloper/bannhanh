@@ -85,6 +85,7 @@ public class FragmentCreateCustomer extends BaseFragment<FragmentCreateCustomerV
         if (customerModel!=null){
             showProgress();
             CustomerRequest.ApiParams params = new CustomerRequest.ApiParams();
+            params.id_business = AppProvider.getPreferences().getUserModel().getId_business();
             params.type_manager = "create_customer";
             params.employee_id = AppProvider.getPreferences().getUserModel().getId();
             params.full_name = customerModel.getFull_name();

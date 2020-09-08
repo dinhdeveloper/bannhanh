@@ -5,6 +5,7 @@ import android.widget.LinearLayout;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.fragment.product.FragmentProductManager;
@@ -18,7 +19,7 @@ public class FragmentProductManagerView extends BaseView<FragmentProductManagerV
     public void init(HomeActivity activity, FragmentProductManagerViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-
+        KeyboardUtils.setupUI(getView(),activity);
         onClickItem();
     }
 
@@ -44,5 +45,7 @@ public class FragmentProductManagerView extends BaseView<FragmentProductManagerV
     public static class UIContainer extends BaseUiContainer {
         @UiElement(R.id.layoutDMSP)
         public LinearLayout layoutDMSP;
+
+
     }
 }

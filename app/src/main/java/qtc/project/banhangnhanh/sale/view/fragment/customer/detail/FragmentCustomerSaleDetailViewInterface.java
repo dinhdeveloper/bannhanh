@@ -7,7 +7,8 @@ import qtc.project.banhangnhanh.admin.model.CustomerModel;
 public interface FragmentCustomerSaleDetailViewInterface extends BaseViewInterface {
 
     void init(SaleHomeActivity activity,FragmentCustomerSaleDetailViewCallback callback);
-    void initLayout(CustomerModel model);
 
-    void showPopUpSuccess();
+    void setDataCustomerDetail(CustomerModel model);
+
+    void resetView();
 }

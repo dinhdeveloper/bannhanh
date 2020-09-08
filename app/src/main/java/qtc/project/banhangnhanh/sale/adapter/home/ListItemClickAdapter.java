@@ -1,6 +1,7 @@
 package qtc.project.banhangnhanh.sale.adapter.home;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,13 +18,14 @@ import b.laixuantam.myaarlibrary.widgets.superadapter.SuperViewHolder;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.sale.model.ListOrderModel;
 
-public class ListItemClickAdapter  extends SuperAdapter<ListOrderModel> {
+public class ListItemClickAdapter extends SuperAdapter<ListOrderModel> {
 
     private ListItemClickAdapterListener listener;
-    int tonkho = 0;
+    Context context;
 
     public ListItemClickAdapter(Context context, List<ListOrderModel> items) {
         super(context, items, R.layout.custom_item_list_product_home);
+        this.context = context;
     }
 
     public interface ListItemClickAdapterListener {
@@ -47,75 +49,41 @@ public class ListItemClickAdapter  extends SuperAdapter<ListOrderModel> {
         ImageView imageView_close = holder.findViewById(R.id.imageView_close);
         ImageView button_remove = holder.findViewById(R.id.button_remove);
         ImageView button_add = holder.findViewById(R.id.button_add);
-        TextView nameProduct = holder.findViewById(R.id.nameProduct);
-        EditText quantity = holder.findViewById(R.id.quantity);
+        TextView edtNameProduct = holder.findViewById(R.id.nameProduct);
+        EditText edtQuantity = holder.findViewById(R.id.quantity);
         TextView priceProduct = holder.findViewById(R.id.priceProduct);
 
         String pattern = "###,###.###";
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
-        nameProduct.setText(item.getNameProduct());
-        long price = Long.valueOf(item.getPriceProduct()) * Long.valueOf(item.getQuantityProduct());
+        edtNameProduct.setText(item.getNameProduct());
+        long price = (long) (Long.valueOf(item.getPriceProduct()) * Double.valueOf(item.getQuantityProduct()));
         priceProduct.setText(decimalFormat.format(price) + " đ");
-        quantity.setText(item.getQuantityProduct());
-        quantity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        edtQuantity.setText(item.getQuantityProduct());
+        edtQuantity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (!quantity.getText().toString().trim().isEmpty()){
-                        if (Long.valueOf(quantity.getText().toString()) > Long.valueOf(item.getInventory())) {
+                    if (!TextUtils.isEmpty(edtQuantity.getText().toString())) {
+                        if (Double.valueOf(edtQuantity.getText().toString()) > Double.valueOf(item.getInventory())) {
                             Toast.makeText(getContext(), "Tồn kho không đủ.", Toast.LENGTH_SHORT).show();
-                            quantity.setText(item.getQuantityProduct());
-                        } else if (quantity.getText().toString().equalsIgnoreCase("0") || quantity.getText().toString().trim().isEmpty()) {
-                            quantity.setText(String.valueOf(1));
-                            item.setQuantityProduct(String.valueOf(1));
-                            priceProduct.setText(decimalFormat.format(1 * Long.valueOf(item.getPriceProduct())));
-                            listener.onChangeSoLuong(item);
-                        } else {
-                            item.setQuantityProduct(quantity.getText().toString());
-                            priceProduct.setText(decimalFormat.format(Long.valueOf(item.getQuantityProduct()) * Long.valueOf(item.getPriceProduct())));
-                            listener.onChangeSoLuong(item);
+                            return false;
                         }
-                    }else {
-                        quantity.setText(String.valueOf(1));
-                        item.setQuantityProduct(String.valueOf(1));
-                        priceProduct.setText(decimalFormat.format(1 * Long.valueOf(item.getPriceProduct())));
+                        double new_quantity = Double.valueOf(edtQuantity.getText().toString());
+                        edtQuantity.setText(String.valueOf(new_quantity));
+                        item.setQuantityProduct(String.valueOf(new_quantity));
+                        long price = (long) (Long.valueOf(item.getPriceProduct()) * new_quantity);
+                        priceProduct.setText(decimalFormat.format(price) + " đ");
                         listener.onChangeSoLuong(item);
+                        return true;
+                    } else {
+                        Toast.makeText(context, "Vui lòng nhập số lượng.", Toast.LENGTH_SHORT).show();
+                        return false;
                     }
                 }
-                return true;
+                return false;
             }
         });
-//        quantity.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-//                    if (!quantity.getText().toString().trim().isEmpty()){
-//                        if (Long.valueOf(quantity.getText().toString()) > Long.valueOf(item.getInventory())) {
-//                            Toast.makeText(getContext(), "Tồn kho không đủ.", Toast.LENGTH_SHORT).show();
-//                            quantity.setText(item.getQuantityProduct());
-//                        } else if (quantity.getText().toString().equalsIgnoreCase("0") || quantity.getText().toString().trim().isEmpty()) {
-//                            quantity.setText(String.valueOf(1));
-//                            item.setQuantityProduct(String.valueOf(1));
-//                            priceProduct.setText(decimalFormat.format(1 * Long.valueOf(item.getPriceProduct())));
-//                            listener.onChangeSoLuong(item);
-//                        } else {
-//                            item.setQuantityProduct(quantity.getText().toString());
-//                            priceProduct.setText(decimalFormat.format(Long.valueOf(item.getQuantityProduct()) * Long.valueOf(item.getPriceProduct())));
-//                            listener.onChangeSoLuong(item);
-//                        }
-//                    }else {
-//                        quantity.setText(String.valueOf(1));
-//                        item.setQuantityProduct(String.valueOf(1));
-//                        priceProduct.setText(decimalFormat.format(1 * Long.valueOf(item.getPriceProduct())));
-//                        listener.onChangeSoLuong(item);
-//                    }
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-
         imageView_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,15 +97,19 @@ public class ListItemClickAdapter  extends SuperAdapter<ListOrderModel> {
             @Override
             public void onClick(View view) {
                 if (listener != null) {
-                    if (Long.valueOf(item.getInventory()) > Long.valueOf(item.getQuantityProduct())) {
-                        long new_quantity = Long.valueOf(item.getQuantityProduct()) + 1;
-                        quantity.setText(String.valueOf(new_quantity));
-                        long price = Long.valueOf(item.getPriceProduct()) * new_quantity;
+                    if (Double.valueOf(item.getInventory()) > Double.valueOf(item.getQuantityProduct())) {
+                        double new_quantity = Double.valueOf(item.getQuantityProduct()) + 1.0;
+                        edtQuantity.setText(String.valueOf(new_quantity));
+                        long price = (long) (Long.valueOf(item.getPriceProduct()) * new_quantity);
                         priceProduct.setText(decimalFormat.format(price) + " đ");
-
                         listener.onClickThemSoLuong(item);
                     } else {
-                        if (Long.valueOf(quantity.getText().toString()) > Long.valueOf(item.getInventory())) {
+                        if (Double.valueOf(edtQuantity.getText().toString()) > Double.valueOf(item.getInventory())) {
+                            double new_quantity = Double.valueOf(item.getInventory());
+                            edtQuantity.setText(String.valueOf(new_quantity));
+                            long price = (long) (Long.valueOf(item.getPriceProduct()) * new_quantity);
+                            priceProduct.setText(decimalFormat.format(price) + " đ");
+                            listener.onClickThemSoLuong(item);
                             button_add.setEnabled(false);
                             Toast.makeText(getContext(), "Hàng tồn kho đã hết", Toast.LENGTH_SHORT).show();
                         }
@@ -150,14 +122,14 @@ public class ListItemClickAdapter  extends SuperAdapter<ListOrderModel> {
             @Override
             public void onClick(View view) {
                 if (listener != null) {
-                    long new_quantity = Long.valueOf(quantity.getText().toString()) - 1;
-                    if (new_quantity > 1) {
-                        quantity.setText(String.valueOf(new_quantity));
-                        long price = Long.valueOf(item.getPriceProduct()) * new_quantity;
+                    double new_quantity = Double.valueOf(edtQuantity.getText().toString()) - 1.0;
+                    if (new_quantity > 1.0) {
+                        edtQuantity.setText(String.valueOf(new_quantity));
+                        long price = (long) (Double.valueOf(item.getPriceProduct()) * new_quantity);
                         priceProduct.setText(decimalFormat.format(price) + " đ");
                     } else {
-                        quantity.setText(String.valueOf(1));
-                        long price = Long.valueOf(item.getPriceProduct()) * 1;
+                        edtQuantity.setText(String.valueOf(1.0));
+                        long price = (long) (Long.valueOf(item.getPriceProduct()) * 1.0);
                         priceProduct.setText(decimalFormat.format(price) + " đ");
                     }
                     listener.onClickGiamSoLuong(item);

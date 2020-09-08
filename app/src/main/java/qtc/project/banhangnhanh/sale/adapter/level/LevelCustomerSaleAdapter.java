@@ -39,7 +39,7 @@ public class LevelCustomerSaleAdapter extends SuperAdapter<LevelCustomerModel> {
         TextView discount = holder.findViewById(R.id.discount);
         CardView layoutLevelCus = holder.findViewById(R.id.layoutLevelCus);
 
-        AppProvider.getImageHelper().displayImage(Consts.HOST_API+item.getImage(), imageLevel, null, R.drawable.imageloading);
+        AppProvider.getImageHelper().displayImage(Consts.HOST_API+item.getImage(), imageLevel, null, R.drawable.no_image_full);
         if (item.getDescription()==null ||item.getDescription().isEmpty()){
             description.setText(item.getName());
         }

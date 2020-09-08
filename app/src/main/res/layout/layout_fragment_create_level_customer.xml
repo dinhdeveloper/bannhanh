@@ -227,6 +227,7 @@
             <!--btn-->
             <LinearLayout
                 android:id="@+id/layout_create"
+                android:layout_marginVertical="@dimen/dp20"
                 android:background="@drawable/custom_background_button_login"
                 android:layout_gravity="center"
                 android:layout_width="200dp"

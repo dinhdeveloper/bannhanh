@@ -2,6 +2,8 @@ package qtc.project.banhangnhanh.sale.view.fragment.order;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -12,157 +14,212 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.AppUtils;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
+import b.laixuantam.myaarlibrary.widgets.cptr.PtrClassicFrameLayout;
+import b.laixuantam.myaarlibrary.widgets.cptr.PtrDefaultHandler;
+import b.laixuantam.myaarlibrary.widgets.cptr.PtrFrameLayout;
+import b.laixuantam.myaarlibrary.widgets.cptr.loadmore.OnLoadMoreListener;
+import b.laixuantam.myaarlibrary.widgets.cptr.recyclerview.RecyclerAdapterWithHF;
+import b.laixuantam.myaarlibrary.widgets.dialog.alert.KAlertDialog;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
+import qtc.project.banhangnhanh.admin.dialog.option.OptionModel;
+import qtc.project.banhangnhanh.admin.model.BaseResponseModel;
 import qtc.project.banhangnhanh.sale.adapter.order.OrderAdapter;
+import qtc.project.banhangnhanh.sale.adapter.product.ProductProductAdapter;
 import qtc.project.banhangnhanh.sale.model.OrderModel;
+import qtc.project.banhangnhanh.sale.model.ProductModel;
+import qtc.project.banhangnhanh.sale.view.fragment.list_base.FragmentListBaseViewCallback;
+import qtc.project.banhangnhanh.sale.view.fragment.list_base.FragmentListBaseViewInterface;
 
-public class FragmentOrderSaleView extends BaseView<FragmentOrderSaleView.UIContainer> implements FragmentOrderSaleViewInterface {
+public class FragmentOrderSaleView extends BaseView<FragmentOrderSaleView.UIContainer> implements FragmentListBaseViewInterface {
     SaleHomeActivity activity;
-    FragmentOrderSaleViewCallback callback;
+    FragmentListBaseViewCallback callback;
+    private OrderAdapter orderAdapter;
+    private RecyclerAdapterWithHF recyclerAdapterWithHF;
+    private ArrayList<OptionModel> listDatas = new ArrayList<>();
+    private Timer timer = new Timer();
+    private final long DELAY = 1000; // in ms
+    private boolean isRefreshList = false;
 
-    ArrayList<OrderModel> orderModels = new ArrayList<>();
-
-    boolean enableLoadMore = true;
-    OrderAdapter adapter;
     @Override
-    public void init(SaleHomeActivity activity, FragmentOrderSaleViewCallback callback) {
+    public void init(SaleHomeActivity activity, FragmentListBaseViewCallback callback) {
         this.activity = activity;
-        this.callback =callback;
+        this.callback = callback;
 
-        initRecycler();
+        KeyboardUtils.setupUI(getView(), activity);
 
         ui.title_header.setText("Đơn hàng");
+        ui.edit_filter.setHint("Mã đơn hàng");
+        setGone(ui.actionAdd);
         ui.imvHome.setOnClickListener(v -> {
-            if (callback!=null)
-                callback.goHome();
+            if (callback != null)
+                callback.goToFragmentDashBoard();
+        });
+        setVisible(ui.actionFilter);
+        ui.actionFilter.setOnClickListener(v -> {
+            if (callback != null)
+                callback.onClickFilter();
         });
 
-        ui.imvFilter.setOnClickListener(v -> {
-            orderModels.clear();
-            adapter.notifyDataSetChanged();
-            if (callback!=null)
-                callback.filter();
-        });
-
-        ui.imageNavLeft.setOnClickListener(v -> {
-            if (callback!=null){
-                callback.callNav();
+        ui.edit_filter.setOnEditorActionListener((v, actionId, event) -> {
+            if (EditorInfo.IME_ACTION_SEARCH == actionId) {
+                AppUtils.hideKeyBoard(getView());
+                listDatas.clear();
+                orderAdapter.notifyDataSetChanged();
+                ui.recycler_view_list_order.getRecycledViewPool().clear();
+                callback.onRequestSearchWithFilter("", ui.edit_filter.getText().toString());
+                return true;
             }
+            return false;
         });
 
-        onClick();
+        setUpListData();
     }
 
-    private void onClick() {
-        //search customer
-        ui.edit_filter.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-        //ui.edit_filter.setInputType();
-        ui.edit_filter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    private void setUpListData() {
+        ui.recycler_view_list_order.getRecycledViewPool().clear();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        ui.recycler_view_list_order.setLayoutManager(linearLayoutManager);
+
+        //todo setup list with adapter
+
+        orderAdapter = new OrderAdapter(getContext(), listDatas);
+
+        orderAdapter.setListener(item -> {
+            if (callback != null)
+                callback.onItemListSelected(item);
+        });
+
+        recyclerAdapterWithHF = new RecyclerAdapterWithHF(orderAdapter);
+
+        ui.recycler_view_list_order.setAdapter(recyclerAdapterWithHF);
+
+        ui.ptrClassicFrameLayout.setLoadMoreEnable(true);
+
+        ui.ptrClassicFrameLayout.setPtrHandler(new PtrDefaultHandler(true) {
             @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (ui.edit_filter.getText().toString() != null) {
-                        searchOrder(ui.edit_filter.getText().toString());
-                        return true;
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                AppUtils.hideKeyBoard(getView());
+                isRefreshList = true;
+                ui.edit_filter.setText("");
+                listDatas.clear();
+                orderAdapter.notifyDataSetChanged();
+                ui.recycler_view_list_order.getRecycledViewPool().clear();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ui.ptrClassicFrameLayout.refreshComplete();
+
+                        if (callback != null) {
+                            callback.refreshLoadingList();
+                            isRefreshList = false;
+                        }
                     }
-                }
-                Toast.makeText(activity, "Không có kết quả tìm kiếm!", Toast.LENGTH_SHORT).show();
-                return false;
+                }, 100);
+
+
             }
         });
 
-        ui.edit_filter.setOnKeyListener(new View.OnKeyListener() {
+        ui.ptrClassicFrameLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                    if (ui.edit_filter.getText().toString() != null) {
-                        searchOrder(ui.edit_filter.getText().toString());
-                        return true;
+            public void loadMore() {
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        if (callback != null)
+                            callback.onRequestLoadMoreList();
+
                     }
-                }
-                return false;
+                }, 100);
             }
         });
-
-        //xos search
-        ui.image_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                orderModels.clear();
-                adapter.notifyDataSetChanged();
-                ui.edit_filter.setText(null);
-                callback.reQuestData();
-                enableLoadMore = true;
-            }
-        });
-    }
-
-    private void searchOrder(String search) {
-        if (callback != null)
-            callback.searchOrder(search);
     }
 
     @Override
-    public void initRecyclerViewOrder(OrderModel[] list) {
-        if (list == null || list.length == 0) {
-            if (orderModels.size() == 0)
+    public void showEmptyList() {
+        setVisible(ui.layoutEmptyList);
+        setGone(ui.ptrClassicFrameLayout);
+    }
+
+    @Override
+    public void hideEmptyList() {
+        setGone(ui.layoutEmptyList);
+        setVisible(ui.ptrClassicFrameLayout);
+    }
+
+    @Override
+    public void setDataList(BaseResponseModel arrDatas) {
+        ui.recycler_view_list_order.getRecycledViewPool().clear();
+
+        if (arrDatas.getData() == null || arrDatas.getData().length == 0) {
+            if (listDatas.size() == 0)
                 showEmptyList();
             return;
         }
-        orderModels.addAll(Arrays.asList(list));
-        adapter.notifyDataSetChanged();
-    }
 
-    private void initRecycler() {
-        ui.recycler_view_list.getRecycledViewPool().clear();
-        ui.layoutNone.setVisibility(View.GONE);
-        ui.recycler_view_list.setVisibility(View.VISIBLE);
-        adapter = new OrderAdapter(activity,orderModels);
-        ui.recycler_view_list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
-        ui.recycler_view_list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        adapter.setListener(model -> {
-            if (callback != null)
-                enableLoadMore = true;
-            callback.goToDetail(model);
-        });
-    }
+        hideEmptyList();
 
-    private void showEmptyList() {
+//        listDatas.addAll(Arrays.asList(arrDatas));
+        OrderModel[] arrOrder = (OrderModel[]) arrDatas.getData();
+
+        for (OrderModel itemOrderModel : arrOrder) {
+            OptionModel optionModel = new OptionModel();
+            optionModel.setDtaCustom(itemOrderModel);
+            listDatas.add(optionModel);
+//            if (customerSaleAdapter!=null){
+//                customerSaleAdapter.getListData().add(optionModel);
+//                customerSaleAdapter.getListDataBackup().add(optionModel);
+//            }
+        }
+
+        recyclerAdapterWithHF.notifyDataSetChanged();
+        ui.ptrClassicFrameLayout.loadMoreComplete(true);
+        ui.ptrClassicFrameLayout.setLoadMoreEnable(true);
     }
 
     @Override
     public void setNoMoreLoading() {
-        enableLoadMore = false;
+        ui.ptrClassicFrameLayout.loadMoreComplete(true);
+        ui.ptrClassicFrameLayout.setLoadMoreEnable(false);
     }
 
     @Override
-    public void clearnData() {
-        orderModels.clear();
-        adapter.notifyDataSetChanged();
+    public void resetListData() {
+        listDatas.clear();
+        orderAdapter.notifyDataSetChanged();
+        ui.recycler_view_list_order.getRecycledViewPool().clear();
     }
 
     @Override
-    public void setLayoutNull() {
-        orderModels.clear();
-        adapter.notifyDataSetChanged();
+    public void hideRootView() {
+        setGone(ui.layoutRootView);
     }
 
     @Override
-    public void initRecyclerView(OrderModel[] list) {
-        if (list == null || list.length == 0) {
-            if (orderModels.size() == 0)
-                showEmptyList();
-            return;
-        }
-        orderModels.addAll(Arrays.asList(list));
-        adapter.notifyDataSetChanged();
+    public void showRootView() {
+        setVisible(ui.layoutRootView);
+    }
+
+    @Override
+    public void clearListData() {
+        listDatas.clear();
+        orderAdapter.notifyDataSetChanged();
+        ui.recycler_view_list_order.getRecycledViewPool().clear();
     }
 
     @Override
@@ -172,14 +229,15 @@ public class FragmentOrderSaleView extends BaseView<FragmentOrderSaleView.UICont
 
     @Override
     public int getViewId() {
-        return R.layout.layout_fragment_order_sale;
+        return R.layout.layout_admin_fragment_list_base;
     }
 
-
-
     public class UIContainer extends BaseUiContainer {
-        @UiElement(R.id.imageNavLeft)
-        public ImageView imageNavLeft;
+        @UiElement(R.id.layoutRootView)
+        public View layoutRootView;
+
+        @UiElement(R.id.btnBackHeader)
+        public View btnBackHeader;
 
         @UiElement(R.id.title_header)
         public TextView title_header;
@@ -187,24 +245,22 @@ public class FragmentOrderSaleView extends BaseView<FragmentOrderSaleView.UICont
         @UiElement(R.id.imvHome)
         public ImageView imvHome;
 
-        @UiElement(R.id.layoutNone)
-        public LinearLayout layoutNone;
-
-        @UiElement(R.id.recycler_view_list)
-        public RecyclerView recycler_view_list;
-
-        @UiElement(R.id.imvFilter)
-        public ImageView imvFilter;
-
         @UiElement(R.id.edit_filter)
         public EditText edit_filter;
 
-        @UiElement(R.id.image_close)
-        public ImageView image_close;
+        @UiElement(R.id.btnAction1)
+        public ImageView actionAdd;
 
-        @UiElement(R.id.layoutDis)
-        public RelativeLayout layoutDis;
+        @UiElement(R.id.btnAction2)
+        public View actionFilter;
 
+        @UiElement(R.id.ptrClassicFrameLayout)
+        public PtrClassicFrameLayout ptrClassicFrameLayout;
 
+        @UiElement(R.id.recycler_view_list)
+        public RecyclerView recycler_view_list_order;
+
+        @UiElement(R.id.layoutEmptyList)
+        public View layoutEmptyList;
     }
 }

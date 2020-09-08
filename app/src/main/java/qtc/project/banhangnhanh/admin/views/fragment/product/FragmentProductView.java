@@ -9,6 +9,7 @@ import b.laixuantam.myaarlibrary.base.BaseView;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.fragment.product.doitra.FragmentDoiTraHangHoa;
+import qtc.project.banhangnhanh.admin.fragment.product.product_disable.FragmentProductDisable;
 import qtc.project.banhangnhanh.admin.fragment.product.productcategory.FragmentCategoryProduct;
 import qtc.project.banhangnhanh.admin.fragment.product.productlist.FragmentProductList;
 import qtc.project.banhangnhanh.admin.fragment.product.quanlylohang.FragmentQuanLyLoHang;
@@ -60,6 +61,14 @@ public class FragmentProductView  extends BaseView<FragmentProductView.UIContain
                 activity.addFragment(new FragmentDoiTraHangHoa(),true,null);
             }
         });
+
+        ui.layoutVHH.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.replaceFragment(new FragmentProductDisable(),true,null);
+            }
+        });
+
     }
 
     @Override
@@ -83,6 +92,7 @@ public class FragmentProductView  extends BaseView<FragmentProductView.UIContain
         public LinearLayout layoutDTHH;
         @UiElement(R.id.imageNavLeft)
         public ImageView imageNavLeft;
-
+        @UiElement(R.id.layoutVHH)
+        public LinearLayout layoutVHH;
     }
 }

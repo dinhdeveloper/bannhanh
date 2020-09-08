@@ -101,7 +101,7 @@ public class BillActivity extends Activity {
                 outputStream = btsocket.getOutputStream();
                 byte[] printformat = new byte[]{0x1B, 0x21, 0x03};
                 outputStream.write(printformat);
-                printPhoto(R.drawable.company);
+                //printPhoto(R.drawable.company);
                 printNewLine();
                 printCustom("QTC TEK", 1, 1);
                 printNewLine();

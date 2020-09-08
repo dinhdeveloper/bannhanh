@@ -16,6 +16,7 @@ import qtc.project.banhangnhanh.admin.dependency.AppProvider;
 import qtc.project.banhangnhanh.admin.model.BaseResponseModel;
 import qtc.project.banhangnhanh.admin.model.CustomerModel;
 import qtc.project.banhangnhanh.sale.api.CustomerSaleRequest;
+import qtc.project.banhangnhanh.sale.event.BackShowRootViewEvent;
 import qtc.project.banhangnhanh.sale.view.fragment.customer.filter.FragmentCustomerSaleFilterView;
 import qtc.project.banhangnhanh.sale.view.fragment.customer.filter.FragmentCustomerSaleFilterViewCallback;
 import qtc.project.banhangnhanh.sale.view.fragment.customer.filter.FragmentCustomerSaleFilterViewInterface;
@@ -88,7 +89,7 @@ public class FragmentCustomerSaleFilter extends BaseFragment<FragmentCustomerSal
     @Override
     public void setCustomerToHome(CustomerModel model) {
         if (activity != null) {
-            activity.checkBack();
+            onBackP();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -102,50 +103,52 @@ public class FragmentCustomerSaleFilter extends BaseFragment<FragmentCustomerSal
     public void onBackP() {
         if (activity != null)
             activity.checkBack();
+            BackShowRootViewEvent.post();
     }
 
     @Override
     public void getAllData() {
-        showProgress();
+        //showProgress();
         resetPage();
-        CustomerRequest.ApiParams params = new CustomerRequest.ApiParams();
-        params.id_business = AppProvider.getPreferences().getUserModel().getId_business();
-        params.page = String.valueOf(page);
-        AppProvider.getApiManagement().call(CustomerRequest.class, params, new ApiRequest.ApiCallback<BaseResponseModel<CustomerModel>>() {
-            @Override
-            public void onSuccess(BaseResponseModel<CustomerModel> result) {
-                dismissProgress();
-                if (!TextUtils.isEmpty(result.getSuccess()) && Objects.requireNonNull(result.getSuccess()).equalsIgnoreCase("true")) {
-                    if (!TextUtils.isEmpty(result.getTotal_page())) {
-                        totalPage = Integer.valueOf(result.getTotal_page());
-                        if (page == totalPage) {
-                            view.setNoMoreLoading();
-                        }
-                    } else {
-                        view.setNoMoreLoading();
-                    }
-                    view.clearnData();
-                    view.initCustomer(result.getData());
-                } else {
-                    if (!TextUtils.isEmpty(result.getMessage()))
-                        showAlert(result.getMessage(), KAlertDialog.ERROR_TYPE);
-                    else
-                        showAlert("Không thể tải dữ liệu.", KAlertDialog.ERROR_TYPE);
-                }
-            }
-
-            @Override
-            public void onError(ErrorApiResponse error) {
-                dismissProgress();
-                Log.e("onError", error.message);
-            }
-
-            @Override
-            public void onFail(ApiRequest.RequestError error) {
-                dismissProgress();
-                Log.e("onFail", error.name());
-            }
-        });
+        callDataCustomer();
+//        CustomerRequest.ApiParams params = new CustomerRequest.ApiParams();
+//        params.id_business = AppProvider.getPreferences().getUserModel().getId_business();
+//        params.page = String.valueOf(page);
+//        AppProvider.getApiManagement().call(CustomerRequest.class, params, new ApiRequest.ApiCallback<BaseResponseModel<CustomerModel>>() {
+//            @Override
+//            public void onSuccess(BaseResponseModel<CustomerModel> result) {
+//                dismissProgress();
+//                if (!TextUtils.isEmpty(result.getSuccess()) && Objects.requireNonNull(result.getSuccess()).equalsIgnoreCase("true")) {
+//                    if (!TextUtils.isEmpty(result.getTotal_page())) {
+//                        totalPage = Integer.valueOf(result.getTotal_page());
+//                        if (page == totalPage) {
+//                            view.setNoMoreLoading();
+//                        }
+//                    } else {
+//                        view.setNoMoreLoading();
+//                    }
+//                    view.clearnData();
+//                    view.initCustomer(result.getData());
+//                } else {
+//                    if (!TextUtils.isEmpty(result.getMessage()))
+//                        showAlert(result.getMessage(), KAlertDialog.ERROR_TYPE);
+//                    else
+//                        showAlert("Không thể tải dữ liệu.", KAlertDialog.ERROR_TYPE);
+//                }
+//            }
+//
+//            @Override
+//            public void onError(ErrorApiResponse error) {
+//                dismissProgress();
+//                Log.e("onError", error.message);
+//            }
+//
+//            @Override
+//            public void onFail(ApiRequest.RequestError error) {
+//                dismissProgress();
+//                Log.e("onFail", error.name());
+//            }
+//        });
     }
 
     @Override

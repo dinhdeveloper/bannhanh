@@ -11,4 +11,6 @@ public interface FragmentOrderDetailSaleViewInterface extends BaseViewInterface 
     void initView(OrderModel model);
 
     void showSuccess();
+
+    void dismissDialog();
 }

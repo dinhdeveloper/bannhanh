@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="qtc.project.banhangnhanh" >
+    package="qtc.project.banhangnhanh">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.ACCESS_BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
     <meta-data
         android:name="com.google.android.gms.vision.DEPENDENCIES"
         android:value="barcode" />
 
-    <uses-permission android:name="android.permission.CAMERA" tools:node="replace" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera2" android:required="false"/>
+    <uses-permission
+        android:name="android.permission.CAMERA"
+        android:required="false"
+        tools:node="replace" />
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -35,7 +40,7 @@
         android:name="android.permission.SEND_SMS"
         tools:node="remove" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
 
     <application
         android:name=".MyApplication"
@@ -46,12 +51,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning" >
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activity.BarCodeActivity" />
-        <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.SaleHomeActivity" />
-        <activity android:name=".activity.LoginActivity" >
+        <activity android:name=".activity.HomeActivity">
+            <intent-filter>
+                <action android:name="check_sign_out" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.SaleHomeActivity">
+            <intent-filter>
+                <action android:name="check_sign_out" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="employee_status_disable" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.LoginPreviewActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="check_sign_out" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,10 +109,26 @@
             android:name=".sale.bill.BTDeviceList"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".sale.bill.BTDevice"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.Qr_BarcodeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="check_notify" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.NotificationManagerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="check_notify" />
 
@@ -95,7 +143,7 @@
         <service
             android:name=".helper.fcm.MyFirebaseInstanceIDService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -103,11 +151,21 @@
         <service
             android:name=".helper.fcm.MyFirebaseMessagingService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="check_sign_out" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </service>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
     </application>
 
 </manifest>

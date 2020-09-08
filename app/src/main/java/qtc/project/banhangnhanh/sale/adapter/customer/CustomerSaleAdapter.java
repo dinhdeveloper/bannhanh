@@ -1,6 +1,7 @@
 package qtc.project.banhangnhanh.sale.adapter.customer;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,17 +11,19 @@ import java.util.List;
 import b.laixuantam.myaarlibrary.widgets.superadapter.SuperAdapter;
 import b.laixuantam.myaarlibrary.widgets.superadapter.SuperViewHolder;
 import qtc.project.banhangnhanh.R;
+import qtc.project.banhangnhanh.admin.dialog.option.OptionModel;
 import qtc.project.banhangnhanh.admin.model.CustomerModel;
 
-public class CustomerSaleAdapter extends SuperAdapter<CustomerModel> {
+public class CustomerSaleAdapter extends SuperAdapter<OptionModel> {
 
     private CustomerAdapterListener listener;
 
-    public CustomerSaleAdapter(Context context, List<CustomerModel> items) {
+    public CustomerSaleAdapter(Context context, List<OptionModel> items) {
         super(context, items, R.layout.custom_item_customer_profile_sale);
     }
-    public interface CustomerAdapterListener{
-        void onItemClick(CustomerModel model);
+
+    public interface CustomerAdapterListener {
+        void onItemClick(OptionModel model);
     }
 
     public void setListener(CustomerSaleAdapter.CustomerAdapterListener listener) {
@@ -28,36 +31,33 @@ public class CustomerSaleAdapter extends SuperAdapter<CustomerModel> {
     }
 
     @Override
-    public void onBind(SuperViewHolder holder, int viewType, int layoutPosition, CustomerModel item) {
+    public void onBind(SuperViewHolder holder, int viewType, int layoutPosition, OptionModel model) {
         TextView nameCustomer = holder.findViewById(R.id.nameCustomer);
         TextView phoneCustomer = holder.findViewById(R.id.phoneCustomer);
         TextView addressCustomer = holder.findViewById(R.id.addressCustomer);
         LinearLayout btn_detail_Customer = holder.findViewById(R.id.btn_detail_Customer);
         LinearLayout layout_customer = holder.findViewById(R.id.layout_customer);
 
+        CustomerModel item = (CustomerModel) model.getDtaCustom();
 
-        if (item.getFull_name()==null|| item.getFull_name().isEmpty()){
-            nameCustomer.setText("Khách vãng lai");
-        }
-        else {
+        if (TextUtils.isEmpty(item.getFull_name())) {
+            nameCustomer.setText("Không xác định");
+        } else {
             nameCustomer.setText(item.getFull_name());
         }
-        if (item.getPhone_number()==null|| item.getPhone_number().isEmpty()){
+        if (TextUtils.isEmpty(item.getPhone_number())) {
             phoneCustomer.setText("Không có số điện thoại");
-        }else {
+        } else {
             phoneCustomer.setText(item.getPhone_number());
         }
-        if (item.getAddress()==null|| item.getAddress().isEmpty()){
+        if (TextUtils.isEmpty(item.getAddress())) {
             addressCustomer.setText("Không có địa chỉ");
-        }else {
+        } else {
             addressCustomer.setText(item.getAddress());
         }
-        layout_customer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener !=null){
-                    listener.onItemClick(item);
-                }
+        layout_customer.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(model);
             }
         });
     }

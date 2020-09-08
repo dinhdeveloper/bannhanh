@@ -89,7 +89,7 @@
                         android:background="@color/white"
                         android:layout_marginHorizontal="5dp"
                         android:layout_weight="1"
-                        android:hint="Mã đơn..."
+                        android:hint="Mã đơn hàng"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 

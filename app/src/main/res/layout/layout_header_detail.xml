@@ -43,11 +43,14 @@
                     android:gravity="center"
                     tools:text="Home"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dp20"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/imvEdit"
+                    android:visibility="invisible"
+                    android:src="@drawable/ic_edit2"
+                    android:padding="7dp"
                     android:layout_width="35dp"
                     android:layout_height="35dp" />
             </LinearLayout>

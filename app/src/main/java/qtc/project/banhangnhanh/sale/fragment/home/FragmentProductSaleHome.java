@@ -15,6 +15,7 @@ import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.admin.dependency.AppProvider;
 import qtc.project.banhangnhanh.admin.model.BaseResponseModel;
 import qtc.project.banhangnhanh.sale.api.ProductRequest;
+import qtc.project.banhangnhanh.sale.event.BackShowRootViewEvent;
 import qtc.project.banhangnhanh.sale.model.ProductModel;
 import qtc.project.banhangnhanh.sale.view.fragment.home.product.FragmentProductSaleHomeView;
 import qtc.project.banhangnhanh.sale.view.fragment.home.product.FragmentProductSaleHomeViewCallback;
@@ -101,7 +102,8 @@ public class FragmentProductSaleHome  extends BaseFragment<FragmentProductSaleHo
     @Override
     public void onBackP() {
         if (activity!=null)
-            activity.replaceFragment(new FragmentSaleHome(),false);
+            activity.checkBack();
+            BackShowRootViewEvent.post();
     }
 
     @Override
@@ -118,7 +120,7 @@ public class FragmentProductSaleHome  extends BaseFragment<FragmentProductSaleHo
     @Override
     public void goToDetail(ProductModel model) {
         if (activity != null) {
-            activity.checkBack();
+            onBackP();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -138,9 +140,23 @@ public class FragmentProductSaleHome  extends BaseFragment<FragmentProductSaleHo
             @Override
             public void onSuccess(BaseResponseModel<ProductModel> result) {
                 dismissProgress();
-                view.clearListDataProduct();
-                view.setNoMoreLoading();
-                view.initRecyclerViewProduct(result.getData());
+                if (!TextUtils.isEmpty(result.getSuccess()) && Objects.requireNonNull(result.getSuccess()).equalsIgnoreCase("true")) {
+                    if (!TextUtils.isEmpty(result.getTotal_page())) {
+                        totalPage = Integer.valueOf(result.getTotal_page());
+                        if (page == totalPage) {
+                            view.setNoMoreLoading();
+                        }
+                    } else {
+                        view.setNoMoreLoading();
+                    }
+                    view.clearListDataProduct();
+                    view.initRecyclerViewProduct(result.getData());
+                } else {
+                    if (!TextUtils.isEmpty(result.getMessage()))
+                        showAlert(result.getMessage(), KAlertDialog.ERROR_TYPE);
+                    else
+                        showAlert("Không thể tải dữ liệu.", KAlertDialog.ERROR_TYPE);
+                }
             }
 
             @Override
@@ -205,5 +221,11 @@ public class FragmentProductSaleHome  extends BaseFragment<FragmentProductSaleHo
         page =1;
         totalPage = 0;
         cateId =null;
+    }
+
+    @Override
+    public void callNav() {
+        if (activity!=null)
+            activity.toggleNav();
     }
 }

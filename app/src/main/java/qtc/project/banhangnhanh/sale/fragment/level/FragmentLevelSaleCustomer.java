@@ -1,5 +1,6 @@
 package qtc.project.banhangnhanh.sale.fragment.level;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import b.laixuantam.myaarlibrary.api.ApiRequest;
 import b.laixuantam.myaarlibrary.api.ErrorApiResponse;
 import b.laixuantam.myaarlibrary.base.BaseFragment;
 import b.laixuantam.myaarlibrary.base.BaseParameters;
+import b.laixuantam.myaarlibrary.widgets.dialog.alert.KAlertDialog;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.admin.dependency.AppProvider;
 import qtc.project.banhangnhanh.admin.model.BaseResponseModel;
@@ -24,8 +26,8 @@ public class FragmentLevelSaleCustomer extends BaseFragment<FragmentLevelSaleCus
 
     @Override
     protected void initialize() {
-        activity = (SaleHomeActivity)getActivity();
-        view.init(activity,this);
+        activity = (SaleHomeActivity) getActivity();
+        view.init(activity, this);
         requestDataLevelCustomer();
     }
 
@@ -36,11 +38,13 @@ public class FragmentLevelSaleCustomer extends BaseFragment<FragmentLevelSaleCus
         AppProvider.getApiManagement().call(LevelCustomerSaleRequest.class, params, new ApiRequest.ApiCallback<BaseResponseModel<LevelCustomerModel>>() {
             @Override
             public void onSuccess(BaseResponseModel<LevelCustomerModel> body) {
-                if (body != null) {
-                    dismissProgress();
+                dismissProgress();
+                if (!TextUtils.isEmpty(body.getSuccess()) && body.getSuccess().equalsIgnoreCase("true")) {
                     ArrayList<LevelCustomerModel> list = new ArrayList<>();
                     list.addAll(Arrays.asList(body.getData()));
                     view.initRecyclerView(list);
+                } else {
+                    showAlert("Không tải được dữ liệu", KAlertDialog.ERROR_TYPE);
                 }
             }
 
@@ -70,19 +74,19 @@ public class FragmentLevelSaleCustomer extends BaseFragment<FragmentLevelSaleCus
 
     @Override
     public void goToLevelDetail(LevelCustomerModel model) {
-        if (activity!=null)
-            activity.replaceFragment(new FragmentLevelSaleDetail().newInstance(model),true);
+        if (activity != null)
+            activity.replaceFragment(new FragmentLevelSaleDetail().newInstance(model), true);
     }
 
     @Override
     public void goHome() {
-        if (activity!=null)
+        if (activity != null)
             activity.replaceFragment(new FragmentSaleHome(), false);
     }
 
     @Override
     public void callNav() {
-        if (activity!=null)
+        if (activity != null)
             activity.toggleNav();
     }
 }

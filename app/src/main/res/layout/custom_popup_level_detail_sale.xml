@@ -75,7 +75,7 @@
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:gravity="start|center"
-                    android:hint="Lý Hiển Long, Trần..."
+                    android:hint="Tên khách hàng"
                     android:textColor="@color/colorText" />
 
                 <ImageView

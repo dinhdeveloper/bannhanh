@@ -11,4 +11,6 @@ public interface FragmentProductSaleDetailViewInterface extends BaseViewInterfac
     void initView(ProductModel model);
 
     void showUpdateSuccess();
+
+    void showPopup();
 }

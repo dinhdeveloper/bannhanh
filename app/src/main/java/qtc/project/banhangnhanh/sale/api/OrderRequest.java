@@ -10,7 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
-@ApiRequest.ApiName("list_order")
+@ApiRequest.ApiName("list_order_ss")
 public class OrderRequest extends ApiRequest<OrderRequest.Service, BaseResponseModel<OrderModel>, OrderRequest.ApiParams> {
 
     public OrderRequest() {
@@ -43,5 +43,7 @@ public class OrderRequest extends ApiRequest<OrderRequest.Service, BaseResponseM
         public String order_code;
         public String filter;
         public String page;
+        public String customer_id;
+        public String customer_code;
     }
 }

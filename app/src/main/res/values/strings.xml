@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">BanHangNhanh</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="company"><b>QTC TEK</b></string>
 
     <string name="title_select_image_from_gallery">Chọn ảnh từ thư viện</string>
     <string name="title_select_image_from_camera">Chọn ảnh từ Camera</string>

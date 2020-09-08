@@ -16,6 +16,7 @@ import java.util.TimerTask;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import b.laixuantam.myaarlibrary.helper.MyLog;
 import b.laixuantam.myaarlibrary.widgets.calendardaterangepicker.customviews.CalendarListener;
 import b.laixuantam.myaarlibrary.widgets.calendardaterangepicker.customviews.DateRangeCalendarView;
@@ -44,7 +45,7 @@ public class FragmentFilterOrderView extends BaseView<FragmentFilterOrderView.UI
     public void init(HomeActivity activity, FragmentFilterOrderViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
 
         initScheduleFilter();

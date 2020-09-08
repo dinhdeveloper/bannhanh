@@ -14,4 +14,6 @@ public interface FragmentProductSaleHomeViewCallback {
     void callAllData();
 
     void resetPage();
+
+    void callNav();
 }

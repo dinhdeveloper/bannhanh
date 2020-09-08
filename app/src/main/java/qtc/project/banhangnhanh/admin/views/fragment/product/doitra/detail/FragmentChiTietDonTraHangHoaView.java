@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.model.PackageReturnModel;
@@ -22,7 +23,7 @@ public class FragmentChiTietDonTraHangHoaView extends BaseView<FragmentChiTietDo
     public void init(HomeActivity activity, FragmentChiTietDonTraHangHoaViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-        
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
     }
 

@@ -41,6 +41,7 @@ public class CustomerSaleRequest extends ApiRequest<CustomerSaleRequest.Service,
         public String customer_filter;
         public String type_manager;
         public String page;
+        public String limit;
 
     }
 }

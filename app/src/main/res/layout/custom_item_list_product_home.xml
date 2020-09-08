@@ -18,6 +18,7 @@
             android:id="@+id/imageView_close"
             android:background="@drawable/custom_background_close_order"
             android:src="@drawable/ic_close_black_24"
+            android:tint="@color/white"
             android:layout_width="24dp"
             android:layout_height="24dp"/>
 
@@ -44,7 +45,7 @@
         <EditText
             android:id="@+id/quantity"
             android:imeOptions="actionDone"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:textStyle="bold"
             tools:text="123"
             android:background="@color/white"

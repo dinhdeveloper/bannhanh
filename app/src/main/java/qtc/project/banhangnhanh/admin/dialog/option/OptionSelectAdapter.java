@@ -10,10 +10,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import b.laixuantam.myaarlibrary.widgets.scaletouchlistener.ScaleTouchListener;
 import b.laixuantam.myaarlibrary.widgets.superadapter.IMulItemViewType;
 import b.laixuantam.myaarlibrary.widgets.superadapter.SuperAdapter;
 import b.laixuantam.myaarlibrary.widgets.superadapter.SuperViewHolder;
+import b.laixuantam.myaarlibrary.widgets.touch_view_anim.scaletouchlistener.ScaleTouchListener;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.admin.dependency.AppProvider;
 import qtc.project.banhangnhanh.helper.Consts;

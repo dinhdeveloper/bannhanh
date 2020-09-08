@@ -3,6 +3,7 @@ package qtc.project.banhangnhanh.sale.view.fragment.order.detail;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -10,11 +11,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.admin.model.OrderDetailModel;
@@ -29,6 +32,7 @@ public class FragmentOrderDetailSaleView extends BaseView<FragmentOrderDetailSal
     public void init(SaleHomeActivity activity, FragmentOrderDetailSaleViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
+        KeyboardUtils.setupUI(getView(), activity);
         ui.title_header.setText("Chi tiết đơn hàng");
         ui.imageNavLeft.setOnClickListener(v -> {
             if (callback != null)
@@ -56,28 +60,66 @@ public class FragmentOrderDetailSaleView extends BaseView<FragmentOrderDetailSal
             long allPrice = 0;
 
             for (int i = 0; i < size; i++) {
-                long total = Long.valueOf(detailModels.get(i).getPrice()) * Long.valueOf(detailModels.get(i).getQuantity());
+                long total = (long) (Long.valueOf(detailModels.get(i).getPrice()) * Double.valueOf(detailModels.get(i).getQuantity()));
                 allPrice += total;
             }
             String pattern = "###,###,###";
             DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
             ui.idPriceDemo.setText(decimalFormat.format(allPrice) + " đ");
-            float tiengiam = allPrice - Long.valueOf(model.getOrder_total());
+            float tiengiam = allPrice - Long.valueOf(model.getOrder_total())- Long.valueOf(model.getOrder_direct_discount());
             ui.allPrice.setText(decimalFormat.format(Long.valueOf(model.getOrder_total())) + " đ");
             // ui.allPrice.setText(decimalFormat.format(allPrice - Integer.parseInt(model.getCustomer_level_discount())));
             ui.priceSale.setText(decimalFormat.format(tiengiam) + " đ");
+            try {
+                ui.priceSaleTT.setText(decimalFormat.format(Long.valueOf(model.getOrder_direct_discount())) + " đ");
+            } catch (Exception e) {
+                Log.e("priceSaleTT", e.getMessage());
+            }
+            // ui.priceSaleTT.setText(model.getOrder_direct_discount()+ " đ");
             if (model.getOrder_status().equalsIgnoreCase("Y")) {
-                ui.btnExit.setVisibility(View.VISIBLE);
+                ui.layout_btn.setVisibility(View.VISIBLE);
                 ui.btnExit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         callback.cancelOrder(model.getId_order());
                     }
                 });
+
+                ui.btnInHoaDon.setOnClickListener(v -> {
+                    inBill(model, detailModels, tiengiam);
+                });
             } else if (model.getOrder_status().equalsIgnoreCase("N")) {
-                ui.btnExit.setVisibility(View.INVISIBLE);
+                ui.layout_btn.setVisibility(View.INVISIBLE);
             }
+        }
+    }
+
+    AlertDialog dialogss;
+
+    private void inBill(OrderModel model, ArrayList<OrderDetailModel> detailModels, float tiengiam) {
+        if (callback != null)
+            callback.inBill(model, detailModels, tiengiam);
+//        LayoutInflater layoutInflater = activity.getLayoutInflater();
+//        View popupView = layoutInflater.inflate(R.layout.sale_custom_popup_inbill, null);
+//
+//        LinearLayout item_detail = popupView.findViewById(R.id.item_detail);
+//        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+//        alert.setView(popupView);
+//        dialogss = alert.create();
+//        // dialog.setCanceledOnTouchOutside(false);
+//        dialogss.show();
+//
+//        item_detail.setOnClickListener(v -> {
+//            if (callback!=null)
+//                callback.inBill(model,detailModels,tiengiam);
+//        });
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialogss != null && dialogss.isShowing()) {
+            dialogss.dismiss();
         }
     }
 
@@ -147,12 +189,20 @@ public class FragmentOrderDetailSaleView extends BaseView<FragmentOrderDetailSal
         @UiElement(R.id.allPrice)
         public TextView allPrice;
 
+        @UiElement(R.id.priceSaleTT)
+        public TextView priceSaleTT;
+
         @UiElement(R.id.recycler_view_order_detail)
         public RecyclerView recycler_view_order_detail;
 
         @UiElement(R.id.btnExit)
         public LinearLayout btnExit;
 
+        @UiElement(R.id.btnInHoaDon)
+        public LinearLayout btnInHoaDon;
+
+        @UiElement(R.id.layout_btn)
+        public LinearLayout layout_btn;
 
     }
 }

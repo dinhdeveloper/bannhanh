@@ -10,5 +10,9 @@ public interface FragmentCustomerSaleViewInterface extends BaseViewInterface {
 
     void init(SaleHomeActivity activity,FragmentCustomerSaleViewCallback callback);
 
-    void initRecyclerViewCustomer(ArrayList<CustomerModel> list);
+    void initRecyclerViewCustomer(CustomerModel[] list);
+
+    void setNoMoreLoading();
+
+    void clearnData();
 }

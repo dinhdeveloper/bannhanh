@@ -46,7 +46,7 @@ public class ProductAdapter extends SuperAdapter<ProductModel> {
         TextView warehouseProduct = holder.findViewById(R.id.warehouseProduct);
         RelativeLayout item_product = holder.findViewById(R.id.item_product);
 
-        if (!item.getListDataProduct().isEmpty() && Integer.valueOf(item.getTotal_stock())>0){
+        if (!item.getListDataProduct().isEmpty() && Double.valueOf(item.getTotal_stock())>0){
             layoutConHang.setVisibility(View.VISIBLE);
             //layoutHetHang.setVisibility(View.GONE);
             AppProvider.getImageHelper().displayImage(Consts.HOST_API + item.getImage(), imageProduct, null, R.drawable.imageloading);
@@ -54,9 +54,9 @@ public class ProductAdapter extends SuperAdapter<ProductModel> {
             String pattern = "###,###.###";
             DecimalFormat decimalFormat = new DecimalFormat(pattern);
             if (!item.getSale_price().isEmpty()){
-                priceProduct.setText(decimalFormat.format(Integer.parseInt(item.getSale_price())) + " đ");
+                priceProduct.setText(decimalFormat.format(Double.valueOf(item.getSale_price())) + " đ");
             }
-            warehouseProduct.setText(decimalFormat.format(Integer.valueOf(item.getTotal_stock())));
+            warehouseProduct.setText(decimalFormat.format(Double.valueOf(item.getTotal_stock())));
 
             item_product.setOnClickListener(new View.OnClickListener() {
                 @Override

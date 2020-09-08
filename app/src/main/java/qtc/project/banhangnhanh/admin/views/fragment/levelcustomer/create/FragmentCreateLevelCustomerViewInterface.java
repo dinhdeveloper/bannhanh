@@ -7,4 +7,6 @@ public interface FragmentCreateLevelCustomerViewInterface extends BaseViewInterf
     void init(HomeActivity activity, FragmentCreateLevelCustomerViewCallback callback);
 
     void setDataProductImage(String filePath);
+
+    void showPopup();
 }

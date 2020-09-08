@@ -15,6 +15,7 @@ import android.widget.TextView;
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
 import b.laixuantam.myaarlibrary.helper.AppUtils;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.sale.fragment.customer.FragmentCustomerSale;
@@ -35,6 +36,7 @@ public class SaleHomeActivityView  extends BaseView<SaleHomeActivityView.UIConta
         this.callback = callback;
         this.activity = activity;
 
+        KeyboardUtils.setupUI(getView(),activity);
         addEventDragLayout();
         addEventsHeaderNavigationLeft();
     }
@@ -125,38 +127,9 @@ public class SaleHomeActivityView  extends BaseView<SaleHomeActivityView.UIConta
         layoutLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater layoutInflater = activity.getLayoutInflater();
-                View popupView = layoutInflater.inflate(R.layout.sale_alert_dialog_dang_xuat, null);
-                TextView title_text = popupView.findViewById(R.id.title_text);
-                TextView content_text = popupView.findViewById(R.id.content_text);
-                Button cancel_button = popupView.findViewById(R.id.cancel_button);
-                Button custom_confirm_button = popupView.findViewById(R.id.custom_confirm_button);
-
-                title_text.setText("Cảnh báo");
-                content_text.setText("Bạn có muốn đăng xuất tài khoản này không?");
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                alert.setView(popupView);
-                AlertDialog dialog = alert.create();
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
-
-
-                cancel_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                custom_confirm_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (callback!=null){
-                            callback.logOut();
-                        }
-                        dialog.dismiss();
-                    }
-                });
+                if (callback!=null){
+                    callback.logOut();
+                }
             }
         });
     }

@@ -37,61 +37,65 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.CurrencyFormater;
 import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import b.laixuantam.myaarlibrary.widgets.currencyedittext.CurrencyEditText;
+import b.laixuantam.myaarlibrary.widgets.ultils.ConvertDate;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
+import qtc.project.banhangnhanh.admin.dependency.AppProvider;
 import qtc.project.banhangnhanh.admin.model.CustomerModel;
+import qtc.project.banhangnhanh.admin.model.EmployeeModel;
 import qtc.project.banhangnhanh.admin.model.PackageInfoModel;
 import qtc.project.banhangnhanh.sale.adapter.home.ListItemClickAdapter;
-import qtc.project.banhangnhanh.sale.adapter.product.ProductAdapter;
-import qtc.project.banhangnhanh.sale.bill.BillActivity;
 import qtc.project.banhangnhanh.sale.database.DatabaseProvider;
+import qtc.project.banhangnhanh.sale.fragment.home.FragmentSaleHome;
 import qtc.project.banhangnhanh.sale.model.ListOrderModel;
+import qtc.project.banhangnhanh.sale.model.OrderModel;
 import qtc.project.banhangnhanh.sale.model.ProductModel;
 
-public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContainer> implements FragmentSaleHomeViewInterface, ZXingScannerView.ResultHandler{
+public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContainer> implements FragmentSaleHomeViewInterface, ZXingScannerView.ResultHandler {
     SaleHomeActivity activity;
     FragmentSaleHomeViewCallback callback;
-    String name = "";
-    String level = null;
     String discount = null;
-    String gia = "";
+
     String id_customer = null;
     String tongtien = null;
-    int tonkho = 0;
+    double tonkho = 0;
     private ZXingScannerView mScannerView;
     private Timer timer = new Timer();
     private final long DELAY = 1000; // in ms
-
-    int size = 0;
     long tienthoilai = 0;
     long tienkhachdua;
+    long tiengiamtructiep = 0;
     HashMap<String, ListOrderModel> hashMap = new HashMap<>();
     ArrayList<ListOrderModel> arList = new ArrayList<>();
 
-    ArrayList<ProductModel> arrayList = new ArrayList<>();
-    boolean enableLoadMore = true;
-    ProductAdapter productAdapter;
     int TYLE_CODE_GEN = 2;
     ListItemClickAdapter clickAdapter;
 
     DatabaseProvider provider;
+    PackageManager pm;
+
     @Override
     public void init(SaleHomeActivity activity, FragmentSaleHomeViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-        KeyboardUtils.setupUI(getView(),activity);
-        ui.title_header.setText("Home");
+        KeyboardUtils.setupUI(getView(), activity);
+        ui.title_header.setText("Trang chủ");
+        ui.tvStore_end.setText("Hết hạn: " + ConvertDate.changeToNiceFormatDate(AppProvider.getPreferences().getUserModel().getStore_end()));
         ui.tvTitleEmpty.setVisibility(View.VISIBLE);
         ui.tvContentTitleEmpty.setVisibility(View.VISIBLE);
         ui.tvTitleEmpty.setText("Giỏ hàng trống");
@@ -102,8 +106,11 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
         provider = new DatabaseProvider(activity);
         KeyboardUtils.setupUI(getView(), activity);
         ui.edit_filter.requestFocus();
-        getDataSQLite();
+        if (hashMap.isEmpty()) {
+            getDataSQLite();
+        }
         onClick();
+        pm = activity.getPackageManager();
     }
 
 
@@ -116,12 +123,9 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             ui.layoutShow.setVisibility(View.VISIBLE);
             ui.layoutNone.setVisibility(View.GONE);
             //chon khach hang
-            ui.layoutChooseCus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (callback != null) {
-                        callback.goToChooseCustomer();
-                    }
+            ui.layoutChooseCus.setOnClickListener(v -> {
+                if (callback != null) {
+                    callback.goToChooseCustomer();
                 }
             });
             String tongTonKho = null;
@@ -133,6 +137,12 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             for (Map.Entry<String, ListOrderModel> map : hashMap.entrySet()) {
                 arList.add(map.getValue());
             }
+            Collections.sort(arList, new Comparator<ListOrderModel>() {
+                @Override
+                public int compare(ListOrderModel o1, ListOrderModel o2) {
+                    return o1.getPosition_item().compareTo(o2.getPosition_item());
+                }
+            });
             ui.recycler_view_list_order.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
             clickAdapter = new ListItemClickAdapter(activity, arList);
             ui.recycler_view_list_order.setAdapter(clickAdapter);
@@ -147,9 +157,8 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                 @Override
                 public void onClickThemSoLuong(ListOrderModel model) {
                     if (hashMap.get(model.getId()) != null) {
-                        //dem += 1;
                         String old_quantity = hashMap.get(model.getId()).getQuantityProduct();
-                        int new_quantity = Integer.valueOf(old_quantity) + 1;
+                        double new_quantity = Double.valueOf(old_quantity) + 1.0;
                         hashMap.get(model.getId()).setQuantityProduct(String.valueOf(new_quantity));
                         provider.updateRecord(hashMap.get(model.getId()));
                         tinhTong();
@@ -159,12 +168,11 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                 @Override
                 public void onClickGiamSoLuong(ListOrderModel model) {
                     if (hashMap.get(model.getId()) != null) {
-                        //dem -= 1;
                         String old_quantity = hashMap.get(model.getId()).getQuantityProduct();
-                        int new_quantity = Integer.valueOf(old_quantity) - 1;
+                        double new_quantity = Double.valueOf(old_quantity) - 1.0;
                         hashMap.get(model.getId()).setQuantityProduct(String.valueOf(new_quantity));
-                        if (new_quantity <= 1) {
-                            hashMap.get(model.getId()).setQuantityProduct(String.valueOf(1));
+                        if (new_quantity <= 1.0) {
+                            hashMap.get(model.getId()).setQuantityProduct(String.valueOf(1.0));
                         }
                         provider.updateRecord(hashMap.get(model.getId()));
                         tinhTong();
@@ -174,33 +182,79 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                 @Override
                 public void onClickXoaItem(ListOrderModel items) {
                     if (hashMap.get(items.getId()) != null) {
-                        provider.deleteRow(hashMap.get(items.getId()).getId());
+                        provider.deleteRecord(hashMap.get(items.getId()));
                         hashMap.remove(items.getId());
                         clickAdapter.remove(items);
-
                         tinhTong();
+                        if (hashMap.isEmpty()) {
+                            ui.layoutNone.setVisibility(View.VISIBLE);
+                            ui.layoutShow.setVisibility(View.GONE);
+                        }
                     }
                 }
 
                 @Override
                 public void onChangeSoLuong(ListOrderModel item) {
                     if (hashMap.get(item.getId()) != null) {
-                        hashMap.get(item.getId()).setQuantityProduct(item.getQuantityProduct());
-                        if (finalTongTonKho != null) {
-                            if (Integer.valueOf(hashMap.get(item.getId()).getInventory()) <= Integer.valueOf(finalTongTonKho)) {
-                                tinhTong();
-                                provider.updateRecord(hashMap.get(item.getId()));
-                            } else {
-                                Toast.makeText(activity, "Tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            tinhTong();
-                        }
+                        double new_quantity = Double.valueOf(item.getQuantityProduct());
+                        hashMap.get(item.getId()).setQuantityProduct(String.valueOf(new_quantity));
+                        provider.updateRecord(hashMap.get(item.getId()));
+                        tinhTong();
                     }
                 }
             });
             clickAdapter.notifyDataSetChanged();
             tinhTong();
+            //tien giam truc tiep
+            ui.tienGiamTT.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (timer != null)
+                        timer.cancel();
+                    timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!TextUtils.isEmpty(s)) {
+                                        tiengiamtructiep = Long.valueOf(ui.tienGiamTT.getStringValue());
+                                    } else {
+                                        tiengiamtructiep = 0;
+                                    }
+                                    tinhTong();
+                                }
+                            });
+                        }
+
+                    }, DELAY);
+                }
+            });
+            ui.tienGiamTT.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (!TextUtils.isEmpty(ui.tienGiamTT.getStringValue())) {
+                        tiengiamtructiep = Long.valueOf(ui.tienGiamTT.getStringValue());
+                    } else {
+                        tiengiamtructiep = 0;
+                    }
+                    tinhTong();
+                    return true;
+                }
+                return false;
+            });
+
+
             //tinh tien
             ui.btnChoose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -270,12 +324,13 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                         btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                callback.connectBlutooth();
                                 if (tienthoilai < 0) {
                                     priceItem.setText(null);
                                     tien_thoi_lai_khach.setText(null);
                                     Toast.makeText(activity, "Hãy nhập đúng tiền", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    callback.tinhTien(arList, id_customer, tongtien, discount);
+                                    callback.tinhTien(arList, id_customer, tongtien, discount, tiengiamtructiep);
                                     dialog.dismiss();
                                 }
                             }
@@ -290,7 +345,7 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                                         tien_thoi_lai_khach.setText(null);
                                         Toast.makeText(activity, "Hãy nhập đúng tiền", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        callback.tinhTien(arList, id_customer, tongtien, discount);
+                                        callback.tinhTien(arList, id_customer, tongtien, discount, tiengiamtructiep);
                                         dialog.dismiss();
                                     }
                                 }
@@ -307,59 +362,72 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
     }
 
     @Override
-    public void initView(CustomerModel model) {
-        if (model!=null){
-            id_customer = model.getId();
-            ui.nameCustomers.setText(model.getFull_name());
-            ui.nameLevelCuss.setText(model.getLevel_name());
-            discount = model.getLevel_discount();
-            if (model.getLevel_discount() == null) {
+    public void setDataCustomer(CustomerModel model) {
+        if (model != null) {
+            ui.layoutShowCustomer.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(model.getId())) {
+                id_customer = model.getId();
+            }
+            if (!TextUtils.isEmpty(model.getFull_name())) {
+                ui.nameCustomers.setText(model.getFull_name());
+            }
+            if (!TextUtils.isEmpty(model.getLevel_name())) {
+                ui.nameLevelCuss.setText(model.getLevel_name());
+            }
+            if (model.getLevel_discount() == null || model.getLevel_discount().equalsIgnoreCase("0")) {
                 discount = String.valueOf("0");
             } else {
                 discount = String.valueOf(model.getLevel_discount());
                 tinhTong();
             }
             ui.imageClearn.setOnClickListener(v -> {
-                ui.nameCustomers.setText(null);
-                ui.nameLevelCuss.setText(null);
-                model.setId(null);
-                model.setFull_name(null);
-                model.setLevel_name(null);
+                try {
+                    ui.layoutShowCustomer.setVisibility(View.GONE);
+                    ui.priceSale.setText("0 đ");
+                    ui.allPrice.setText(ui.idPriceTemp.getText().toString());
+                    ui.nameCustomers.setText(null);
+                    ui.nameLevelCuss.setText(null);
+                    model.setId(null);
+                    model.setFull_name(null);
+                    model.setLevel_name(null);
+                    discount = String.valueOf("0");
+                    model.setLevel_discount("0");
+                } catch (Exception e) {
+                    Log.e("Exception Customer", e.getMessage());
+                }
             });
         }
     }
 
     @Override
     public void initViewProduct(ArrayList<ProductModel> list) {
-        if (list!=null){
-            for (ProductModel model:list){
-                addItemCart(model,model.getListDataProduct().get(0));
+        if (list != null) {
+            for (ProductModel model : list) {
+                addItemCart(model, model.getListDataProduct().get(0));
             }
-        }
-        else {
+        } else {
             Toast.makeText(activity, "Sản phẩm không tồn tại", Toast.LENGTH_SHORT).show();
         }
     }
 
+    //AlertDialog dialogss;
+
     @Override
-    public void truyenIntent(ArrayList<ListOrderModel> arList) {
-        Intent intent = new Intent(activity, BillActivity.class);
-        Bundle bundle = new Bundle();
+    public void truyenIntent(ArrayList<ListOrderModel> arList, ArrayList<OrderModel> listHoanTat, long tiengiamtructiep) {
         if (tienkhachdua == 0) {
             tienkhachdua = Long.valueOf(tongtien);
         }
-        bundle.putLong("tong_tien", Long.valueOf(tongtien));
-        bundle.putLong("tien_khach_dua", tienkhachdua);
-        bundle.putLong("tien_thoi_lai", tienthoilai);
-        bundle.putSerializable("model", arList);
-        intent.putExtras(bundle);
-        activity.startActivity(intent);
+        if (id_customer != null) {
+            callback.inBill(arList, tongtien, tienkhachdua, tienthoilai, listHoanTat, listHoanTat.get(0).getCustomer_id_code(), tiengiamtructiep);
+        } else {
+            callback.inBill(arList, tongtien, tienkhachdua, tienthoilai, listHoanTat, null, tiengiamtructiep);
+        }
     }
 
 
     @Override
     public void initViewProductClick(ProductModel model) {
-        addItemCart(model,model.getListDataProduct().get(0));
+        addItemCart(model, model.getListDataProduct().get(0));
     }
 
     private void onClick() {
@@ -369,7 +437,7 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             ui.layout_scanbar_code.setVisibility(View.GONE);
         });
         ui.imageNavLeft.setOnClickListener(v -> {
-            if (callback!=null){
+            if (callback != null) {
                 callback.callNav();
             }
         });
@@ -379,7 +447,7 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
         ui.edit_filter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId==EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     callback.goToProductList(ui.edit_filter.getText().toString());
                 }
                 return false;
@@ -387,7 +455,7 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
         });
 
         ui.layoutChooseCus.setOnClickListener(v -> {
-            if (callback!=null)
+            if (callback != null)
                 callback.goToChooseCustomer();
         });
 
@@ -403,14 +471,6 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                 startScan();
             }
         });
-    }
-
-    private void initScanBarcode() {
-        mScannerView = new ZXingScannerView(activity);
-        mScannerView.setAutoFocus(true);
-        mScannerView.setResultHandler(this);
-        ui.content_frame.addView(mScannerView);
-        mScannerView.startCamera();
     }
 
     @Override
@@ -438,7 +498,7 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             mScannerView.setResultHandler(this);
             mScannerView.startCamera();
             rescan();
-        }else {
+        } else {
             mScannerView = new ZXingScannerView(activity);
             mScannerView.setAutoFocus(true);
             mScannerView.setResultHandler(this);
@@ -456,8 +516,12 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
 
     public void rescan() {
         if (mScannerView != null) {
-            mScannerView.startCamera();
-            mScannerView.startCamera(1);
+            if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
+                mScannerView.startCamera();
+            } else {
+                mScannerView.startCamera();
+                mScannerView.startCamera(1);
+            }
             mScannerView.resumeCameraPreview(this);
         }
     }
@@ -492,43 +556,6 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
         }
     }
 
-    private void editextSearch(String resultCode) {
-        if (!resultCode.trim().isEmpty()){
-            ui.edit_filter.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (timer != null)
-                        timer.cancel();
-                    timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (!TextUtils.isEmpty(s)) {
-                                        addCart(ui.edit_filter.getText().toString());
-                                    }
-                                }
-                            });
-                        }
-
-                    }, DELAY);
-                }
-            });
-        }
-    }
-
     private void addCart(String id_code) {
         if (callback != null) {
             if (id_code != null) {
@@ -538,12 +565,16 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             }
         }
     }
+
+    static int count = 0;
+    AlertDialog dialogTienKhach;
+
     private void addItemCart(ProductModel model, PackageInfoModel infoModel) {
 
         if (hashMap.get(infoModel.getPack_id()) != null) {
-            tonkho = Integer.valueOf(model.getTotal_stock());
+            tonkho = Double.valueOf(model.getTotal_stock());
             String old_quantity = hashMap.get(infoModel.getPack_id()).getQuantityProduct();
-            int new_quantity = Integer.valueOf(old_quantity) + 1;
+            double new_quantity = Double.valueOf(old_quantity) + 1.0;
             if (new_quantity <= tonkho) {
                 hashMap.get(infoModel.getPack_id()).setQuantityProduct(String.valueOf(new_quantity));
                 provider.updateRecord(hashMap.get(infoModel.getPack_id()));
@@ -557,6 +588,8 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             orderModel.setQuantityProduct(String.valueOf(1));
             orderModel.setPriceProduct(model.getSale_price());
             orderModel.setInventory(model.getTotal_stock());
+            count++;
+            orderModel.setPosition_item(String.valueOf(count));
             hashMap.put(infoModel.getPack_id(), orderModel);
             //add moi record sqlite
             provider.addNotes(orderModel);
@@ -567,14 +600,13 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             ui.layoutShow.setVisibility(View.VISIBLE);
             ui.layoutNone.setVisibility(View.GONE);
         }
-        //save vao sharedPreferences
-//        arList.clear();
-//        Set<String> keySet = hashMap.keySet();
-//        for (String key : keySet) {
-//            arList.add(hashMap.get(key));
-//            AppProvider.getPreferences().saveMap(key, hashMap.get(key));
-//            AppProvider.getPreferences().saveKeyMap(keySet);
-//        }
+        Collections.sort(arList, new Comparator<ListOrderModel>() {
+            @Override
+            public int compare(ListOrderModel o1, ListOrderModel o2) {
+                return o1.getPosition_item().compareTo(o2.getPosition_item());
+            }
+        });
+
         ui.layoutShow.setVisibility(View.VISIBLE);
         ui.layoutNone.setVisibility(View.GONE);
         ui.recycler_view_list_order.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -590,9 +622,8 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             @Override
             public void onClickThemSoLuong(ListOrderModel model) {
                 if (hashMap.get(model.getId()) != null) {
-                    //dem += 1;
                     String old_quantity = hashMap.get(model.getId()).getQuantityProduct();
-                    int new_quantity = Integer.valueOf(old_quantity) + 1;
+                    double new_quantity = Double.valueOf(old_quantity) + 1.0;
                     hashMap.get(model.getId()).setQuantityProduct(String.valueOf(new_quantity));
                     provider.updateRecord(hashMap.get(model.getId()));
                     tinhTong();
@@ -602,12 +633,11 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             @Override
             public void onClickGiamSoLuong(ListOrderModel model) {
                 if (hashMap.get(model.getId()) != null) {
-                    //dem -= 1;
                     String old_quantity = hashMap.get(model.getId()).getQuantityProduct();
-                    int new_quantity = Integer.valueOf(old_quantity) - 1;
+                    double new_quantity = Double.valueOf(old_quantity) - 1.0;
                     hashMap.get(model.getId()).setQuantityProduct(String.valueOf(new_quantity));
-                    if (new_quantity <= 1) {
-                        hashMap.get(model.getId()).setQuantityProduct(String.valueOf(1));
+                    if (new_quantity <= 1.0) {
+                        hashMap.get(model.getId()).setQuantityProduct(String.valueOf(1.0));
                     }
                     provider.updateRecord(hashMap.get(model.getId()));
                     tinhTong();
@@ -621,23 +651,61 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                     hashMap.remove(items.getId());
                     clickAdapter.remove(items);
                     tinhTong();
+                    if (hashMap.isEmpty()) {
+                        ui.layoutNone.setVisibility(View.VISIBLE);
+                        ui.layoutShow.setVisibility(View.GONE);
+                    }
                 }
             }
 
             @Override
             public void onChangeSoLuong(ListOrderModel item) {
                 if (hashMap.get(item.getId()) != null) {
-                    hashMap.get(item.getId()).setQuantityProduct(item.getQuantityProduct());
-                    if (Integer.valueOf(hashMap.get(item.getId()).getInventory()) <= Integer.valueOf(model.getTotal_stock())) {
-                        tinhTong();
-                    } else {
-                        Toast.makeText(activity, "Tồn kho không đủ", Toast.LENGTH_SHORT).show();
-                    }
+                    double new_quantity = Double.valueOf(item.getQuantityProduct());
+                    hashMap.get(item.getId()).setQuantityProduct(String.valueOf(new_quantity));
+                    provider.updateRecord(hashMap.get(item.getId()));
+                    tinhTong();
                 }
             }
         });
         clickAdapter.notifyDataSetChanged();
         tinhTong();
+        //tien giam truc tiep
+        ui.tienGiamTT.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (timer != null)
+                    timer.cancel();
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!TextUtils.isEmpty(s)) {
+                                    tiengiamtructiep = Long.valueOf(ui.tienGiamTT.getStringValue());
+                                } else {
+                                    tiengiamtructiep = 0;
+                                }
+                                tinhTong();
+                            }
+                        });
+                    }
+
+                }, DELAY);
+            }
+        });
         //tinh tien
         ui.btnChoose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -698,18 +766,18 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                     alert.setView(popupView);
-                    AlertDialog dialog = alert.create();
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
+                    dialogTienKhach = alert.create();
+                    dialogTienKhach.setCanceledOnTouchOutside(false);
+                    dialogTienKhach.show();
 
                     imageNavLeft.setOnClickListener(v -> {
-                        dialog.dismiss();
+                        dialogTienKhach.dismiss();
                     });
 
                     btnExit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            dialogTienKhach.dismiss();
                         }
                     });
                     btnOk.setOnClickListener(new View.OnClickListener() {
@@ -721,8 +789,9 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                                     tien_thoi_lai_khach.setText(null);
                                     Toast.makeText(activity, "Hãy nhập đúng tiền", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    callback.tinhTien(arList, id_customer, tongtien, discount);
-                                    dialog.dismiss();
+                                    //show popup hoi in bill hay k?
+                                    callback.tinhTien(arList, id_customer, tongtien, discount, tiengiamtructiep);
+                                    dialogTienKhach.dismiss();
                                 }
                             }
                         }
@@ -737,8 +806,8 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
                                     tien_thoi_lai_khach.setText(null);
                                     Toast.makeText(activity, "Hãy nhập đúng tiền", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    callback.tinhTien(arList, id_customer, tongtien, discount);
-                                    dialog.dismiss();
+                                    callback.tinhTien(arList, id_customer, tongtien, discount, tiengiamtructiep);
+                                    dialogTienKhach.dismiss();
                                 }
                             }
                             return true;
@@ -751,6 +820,7 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             }
         });
     }
+
     public void tinhTong() {
         try {
             //tong tien tren 1 item
@@ -762,39 +832,52 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
             Set<String> keySet = hashMap.keySet();
             for (String key : keySet) {
                 //tong tien 1 item.
-                priceTemp = Long.valueOf(hashMap.get(key).getQuantityProduct()) * Long.valueOf(hashMap.get(key).getPriceProduct());
+                priceTemp = (long) (Double.valueOf(hashMap.get(key).getQuantityProduct()) * Long.valueOf(hashMap.get(key).getPriceProduct()));
                 total += priceTemp;
             }
             ui.idPriceTemp.setText(decimalFormat.format(total) + " đ");
             if (discount != null) {
-                long tien_giam = (Long.valueOf(total)*Long.valueOf(discount))/100;
-                ui.priceSale.setText(decimalFormat.format(Long.valueOf(tien_giam)) + " đ");
-
-                long tiengiam = (total * Integer.parseInt(discount)) / 100;
-                tongtien = String.valueOf(total - tiengiam);
+                long tiengiam = (long) ((total * Double.valueOf(discount)) / 100);
+                tongtien = String.valueOf(total - tiengiam - tiengiamtructiep);
+                ui.priceSale.setText(decimalFormat.format(Long.valueOf(tiengiam)) + " đ");
                 ui.allPrice.setText(decimalFormat.format(Long.valueOf(tongtien)) + " đ");
             }
+
             //khach vang lai
             else if (discount == null) {
                 discount = "0";
-                ui.priceSale.setText(decimalFormat.format(Integer.parseInt(discount)) + " %");
-                long tiengiam = (total * Integer.parseInt(discount)) / 100;
-                tongtien = String.valueOf(total - tiengiam);
+                ui.priceSale.setText(decimalFormat.format(Double.valueOf(discount)) + " đ");
+                long tiengiam = (long) ((total * Double.valueOf(discount)) / 100);
+                tongtien = String.valueOf(total - tiengiam - tiengiamtructiep);
                 ui.allPrice.setText(decimalFormat.format(Long.valueOf(tongtien)) + " đ");
             }
         } catch (Exception e) {
             Log.e("Ex", e.getMessage());
         }
     }
+
+    @Override
+    public void hideRootView() {
+        setGone(ui.fragmentHome);
+    }
+
+    @Override
+    public void showRootView() {
+        setVisible(ui.fragmentHome);
+    }
+
     @Override
     public int getViewId() {
         return R.layout.layout_fragment_home_sale;
     }
 
-
     public class UIContainer extends BaseUiContainer {
+        @UiElement(R.id.fragmentHome)
+        public View fragmentHome;
+
         @UiElement(R.id.imageNavLeft)
         public ImageView imageNavLeft;
+
 
         @UiElement(R.id.title_header)
         public TextView title_header;
@@ -814,9 +897,6 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
 
         @UiElement(R.id.tvContentTitleEmpty)
         public TextView tvContentTitleEmpty;
-
-        @UiElement(R.id.fragmentHome)
-        public RelativeLayout fragmentHome;
 
         @UiElement(R.id.edit_filter)
         public EditText edit_filter;
@@ -839,14 +919,21 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
         @UiElement(R.id.recycler_view_list_order)
         public RecyclerView recycler_view_list_order;
 
+        @UiElement(R.id.tvStore_end)
+        public TextView tvStore_end;
+
         @UiElement(R.id.idPriceTemp)
         public TextView idPriceTemp;
+
 
         @UiElement(R.id.priceSale)
         public TextView priceSale;
 
         @UiElement(R.id.allPrice)
         public TextView allPrice;
+
+        @UiElement(R.id.tienGiamTT)
+        public CurrencyEditText tienGiamTT;
 
         @UiElement(R.id.btnChoose)
         public LinearLayout btnChoose;
@@ -866,6 +953,8 @@ public class FragmentSaleHomeView extends BaseView<FragmentSaleHomeView.UIContai
         @UiElement(R.id.image_close_layout_scan)
         public ImageView image_close_layout_scan;
 
+        @UiElement(R.id.layoutShowCustomer)
+        public LinearLayout layoutShowCustomer;
 
     }
 }

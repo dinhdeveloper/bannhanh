@@ -20,6 +20,7 @@ import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
 import b.laixuantam.myaarlibrary.helper.AppUtils;
 import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
+import b.laixuantam.myaarlibrary.widgets.dialog.alert.KAlertDialog;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.dependency.AppProvider;
@@ -130,38 +131,9 @@ public class HomeActivityView extends BaseView<HomeActivityView.UIContainer> imp
         log_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater layoutInflater = activity.getLayoutInflater();
-                View popupView = layoutInflater.inflate(R.layout.alert_dialog_waiting, null);
-                TextView title_text = popupView.findViewById(R.id.title_text);
-                TextView content_text = popupView.findViewById(R.id.content_text);
-                Button cancel_button = popupView.findViewById(R.id.cancel_button);
-                Button custom_confirm_button = popupView.findViewById(R.id.custom_confirm_button);
-
-                title_text.setText("Cảnh báo");
-                content_text.setText("Bạn có muốn đăng xuất tài khoản này không?");
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                alert.setView(popupView);
-                AlertDialog dialog = alert.create();
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
-
-
-                cancel_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                custom_confirm_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (callback!=null){
-                            callback.logOut();
-                        }
-                        dialog.dismiss();
-                    }
-                });
+                if (callback!=null){
+                    callback.logOut();
+                }
             }
         });
 
@@ -197,21 +169,25 @@ public class HomeActivityView extends BaseView<HomeActivityView.UIContainer> imp
                 layout_update.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (new_pass.getText().toString().equals(re_new_pass.getText().toString())){
-                            if (!TextUtils.isEmpty(old_pass.getText()) && !TextUtils.isEmpty(new_pass.getText())) {
-                                callback.onClickLogin(old_pass.getText()
-                                        .toString(), new_pass
-                                        .getText()
-                                        .toString(),employeeModel.getId());
-                            } else if (TextUtils.isEmpty(old_pass.getText())) {
-                                old_pass.setError("Nhập mật khẩu cũ");
-                                old_pass.requestFocus();
-                            } else {
-                                new_pass.setError("Nhập mật khẩu mới");
-                                new_pass.requestFocus();
-                            }
+                        if (new_pass.length()<6 && re_new_pass.length()<6){
+                            Toast.makeText(activity, "Mật khẩu phải chứa ít nhất 6 ký tự.", Toast.LENGTH_SHORT).show();
                         }else {
-                            Toast.makeText(getContext(), "Bạn nhập mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+                            if (new_pass.getText().toString().equals(re_new_pass.getText().toString())){
+                                if (!TextUtils.isEmpty(old_pass.getText()) && !TextUtils.isEmpty(new_pass.getText())) {
+                                    callback.onClickLogin(old_pass.getText()
+                                            .toString(), new_pass
+                                            .getText()
+                                            .toString(),employeeModel.getId());
+                                } else if (TextUtils.isEmpty(old_pass.getText())) {
+                                    old_pass.setError("Nhập mật khẩu cũ");
+                                    old_pass.requestFocus();
+                                } else {
+                                    new_pass.setError("Nhập mật khẩu mới");
+                                    new_pass.requestFocus();
+                                }
+                            }else {
+                                Toast.makeText(getContext(), "Bạn nhập mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });

@@ -38,8 +38,8 @@ public class HangBanChayAdapter extends SuperAdapter<TopProductModel> {
             list.get(layoutPosition).setTop("TOP "+(layoutPosition+1));
             top_product.setText(item.getTop());
             name_product.setText(item.getProduct_name());
-            quantity_product.setText(decimalFormat.format(Integer.parseInt(item.getTotal_quantity_item_order())));
-            total_price.setText(decimalFormat.format(Integer.parseInt(item.getTotal_payment_item_order())));
+            quantity_product.setText(decimalFormat.format(Double.valueOf(item.getTotal_quantity_item_order())));
+            total_price.setText(decimalFormat.format(Double.valueOf(item.getTotal_payment_item_order())));
         }
     }
 

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
 import b.laixuantam.myaarlibrary.dependency.AppProvider;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.admin.model.CustomerModel;
@@ -34,6 +35,7 @@ public class FragmentLevelSaleDetailView  extends BaseView<FragmentLevelSaleDeta
     public void init(SaleHomeActivity activity, FragmentLevelSaleDetailViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
     }
 
@@ -53,7 +55,7 @@ public class FragmentLevelSaleDetailView  extends BaseView<FragmentLevelSaleDeta
     public void initLayout(LevelCustomerModel model) {
         if (model!=null){
             ui.title_header.setText(model.getName());
-            AppProvider.getImageHelper().displayImage(Consts.HOST_API + model.getImage(), ui.imageLevel, null, R.drawable.imageloading);
+            AppProvider.getImageHelper().displayImage(Consts.HOST_API + model.getImage(), ui.imageLevel, null, R.drawable.no_image_full);
             ui.description.setText(model.getDescription());
             ui.nameLevel.setText("Số người nhận được cấp độ " + model.getName() + " : ");
 

@@ -2,16 +2,20 @@ package qtc.project.banhangnhanh.sale.view.fragment.home.product;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
+import b.laixuantam.myaarlibrary.widgets.dialog.alert.KAlertDialog;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.sale.adapter.home.ProductHomeAdapter;
@@ -30,10 +34,17 @@ public class FragmentProductSaleHomeView extends BaseView<FragmentProductSaleHom
         this.activity = activity;
         this.callback = callback;
         initRecycler();
+        KeyboardUtils.setupUI(getView(),activity);
         ui.title_header.setText("Danh sách sản phẩm");
         ui.imvHome.setOnClickListener(v -> {
             if (callback!=null)
                 callback.onBackP();
+        });
+
+        ui.imageNavLeft.setOnClickListener(v -> {
+            if (callback != null) {
+                callback.callNav();
+            }
         });
 
         onClick();
@@ -83,7 +94,7 @@ public class FragmentProductSaleHomeView extends BaseView<FragmentProductSaleHom
             return;
         }
         for (ProductModel model : list) {
-            if (Integer.valueOf(model.getTotal_stock()) > 0) {
+            if (Double.valueOf(model.getTotal_stock()) > 0) {
                 arrayList.add(model);
             }
         }
@@ -122,6 +133,7 @@ public class FragmentProductSaleHomeView extends BaseView<FragmentProductSaleHom
     }
 
     private void showEmptyList() {
+        Toast.makeText(activity, "Không có sản phẩm cần tìm", Toast.LENGTH_SHORT).show();
     }
     @Override
     public BaseUiContainer getUiContainer() {

@@ -1,16 +1,25 @@
 package qtc.project.banhangnhanh.sale.view.fragment.product.detail;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -18,32 +27,37 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Set;
+import java.util.UUID;
+
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
 import qtc.project.banhangnhanh.admin.dependency.AppProvider;
 import qtc.project.banhangnhanh.helper.Consts;
 import qtc.project.banhangnhanh.sale.model.ProductModel;
 
-public class FragmentProductSaleDetailView extends BaseView<FragmentProductSaleDetailView.UIContainer> implements FragmentProductSaleDetailViewInterface{
+public class FragmentProductSaleDetailView extends BaseView<FragmentProductSaleDetailView.UIContainer> implements FragmentProductSaleDetailViewInterface {
     SaleHomeActivity activity;
     FragmentProductSaleDetailViewCallback callback;
-    String BARCODE,QRCODE ;
-    String PRODUCT_NAME ;
+    String BARCODE, QRCODE;
+    String PRODUCT_NAME;
+
     @Override
     public void init(SaleHomeActivity activity, FragmentProductSaleDetailViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-
+        KeyboardUtils.setupUI(getView(),activity);
         ui.imageNavLeft.setOnClickListener(v -> {
-            if (callback!=null)
+            if (callback != null)
                 callback.onBackP();
         });
         ui.title_header.setMaxHeight(300);
-        ui.imvEdit.setImageResource(R.drawable.ic_edit2);
-        ui.imvEdit.setMaxWidth(35);
-        ui.imvEdit.setMaxHeight(35);
+        ui.imvEdit.setVisibility(View.VISIBLE);
 
         onClick();
     }
@@ -51,31 +65,51 @@ public class FragmentProductSaleDetailView extends BaseView<FragmentProductSaleD
     private void onClick() {
         //BARCODE
         ui.imvInBarcode.setOnClickListener(v -> {
-            if (callback!=null)
-            {
-                callback.inBarCode(PRODUCT_NAME,BARCODE,"0");
+            if (callback != null) {
+                LayoutInflater layoutInflater = activity.getLayoutInflater();
+                View popupView = layoutInflater.inflate(R.layout.custom_popup_sale_in_barcode, null);
+
+                LinearLayout item_detail = popupView.findViewById(R.id.item_detail);
+                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                alert.setView(popupView);
+                dialogss = alert.create();
+                // dialog.setCanceledOnTouchOutside(false);
+                dialogss.show();
+                item_detail.setOnClickListener(v1 -> {
+                    callback.inBarCode(PRODUCT_NAME, BARCODE, "0");
+                });
             }
         });
 
         ui.imvInQrCode.setOnClickListener(v -> {
-            if (callback!=null)
-            {
-                callback.inBarCode(PRODUCT_NAME,QRCODE,"1");
+            if (callback != null) {
+                LayoutInflater layoutInflater = activity.getLayoutInflater();
+                View popupView = layoutInflater.inflate(R.layout.custom_popup_sale_in_barcode, null);
+
+                LinearLayout item_detail = popupView.findViewById(R.id.item_detail);
+                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                alert.setView(popupView);
+                dialogss = alert.create();
+                // dialog.setCanceledOnTouchOutside(false);
+                dialogss.show();
+                item_detail.setOnClickListener(v1 -> {
+                    callback.inBarCode(PRODUCT_NAME, QRCODE, "1");
+                });
             }
         });
     }
 
     @Override
     public void initView(ProductModel model) {
-        if (model!=null){
+        if (model != null) {
             PRODUCT_NAME = model.getName();
             BARCODE = model.getBarcode();
             QRCODE = model.getQr_code();
             ui.title_header.setText(model.getName());
-            AppProvider.getImageHelper().displayImage(Consts.HOST_API+model.getImage(),ui.imageProduct,null,R.drawable.imageloading);
+            AppProvider.getImageHelper().displayImage(Consts.HOST_API + model.getImage(), ui.imageProduct, null, R.drawable.no_image_full);
             ui.nameProduct.setText(model.getName());
             ui.idProduct.setText(model.getId_code());
-            ui.priceProduct.setText(model.getSale_price());
+            ui.priceProduct.setText(Consts.decimalFormat.format(Long.valueOf(model.getSale_price())));
             ui.tonKho.setText(model.getTotal_stock());
             ui.tonKhoAnToan.setText(model.getQuantity_safetystock());
             ui.description.setText(model.getDescription());
@@ -84,16 +118,14 @@ public class FragmentProductSaleDetailView extends BaseView<FragmentProductSaleD
             try {
                 genarateScanBarcode(model.getBarcode());
                 genarateScanQrcode(model.getQr_code());
-            }catch (Exception e){
-                Log.e("Ex",e.getMessage());
+            } catch (Exception e) {
+                Log.e("Ex", e.getMessage());
             }
             ui.imvEdit.setOnClickListener(v -> {
                 ui.nameProduct.setEnabled(true);
                 ui.description.setEnabled(true);
                 ui.nameProduct.setBackgroundColor(Color.parseColor("#F2F2F2"));
                 ui.description.setBackgroundColor(Color.parseColor("#F2F2F2"));
-
-
                 ui.btnUpdate.setOnClickListener(v1 -> {
                     ProductModel productModel = new ProductModel();
                     productModel.setId(model.getId());
@@ -130,11 +162,24 @@ public class FragmentProductSaleDetailView extends BaseView<FragmentProductSaleD
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+
+                ui.nameProduct.setEnabled(false);
+                ui.description.setEnabled(false);
+                ui.nameProduct.setBackgroundColor(Color.parseColor("#F3ECD3"));
+                ui.description.setBackgroundColor(Color.parseColor("#F3ECD3"));
+
             }
         });
     }
 
-    public void genarateScanBarcode(String resultCode){
+    AlertDialog dialogss;
+
+    @Override
+    public void showPopup() {
+        dialogss.dismiss();
+    }
+
+    public void genarateScanBarcode(String resultCode) {
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             BitMatrix bitMatrix;
@@ -147,7 +192,7 @@ public class FragmentProductSaleDetailView extends BaseView<FragmentProductSaleD
         }
     }
 
-    public void genarateScanQrcode(String resultCode){
+    public void genarateScanQrcode(String resultCode) {
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             BitMatrix bitMatrix;
@@ -169,7 +214,6 @@ public class FragmentProductSaleDetailView extends BaseView<FragmentProductSaleD
     public int getViewId() {
         return R.layout.layout_fragment_product_detail_sale;
     }
-
 
 
     public class UIContainer extends BaseUiContainer {

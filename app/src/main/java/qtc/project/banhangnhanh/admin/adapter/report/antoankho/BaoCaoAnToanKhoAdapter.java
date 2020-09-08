@@ -99,8 +99,8 @@ public class BaoCaoAnToanKhoAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             //int soluongxuat = Integer.parseInt(list.get(position - 1).getQuantity_order()) - Integer.parseInt(list.get(position - 1).getQuantity_storage());
 
-            itemViewHolder.tonkho.setText(decimalFormat.format(Integer.parseInt(list.get(position - 1).getTotal_quantity_storage())));
-            itemViewHolder.price.setText(decimalFormat.format(Integer.parseInt(list.get(position - 1).getQuantity_safetystock())));
+            itemViewHolder.tonkho.setText(decimalFormat.format(Double.valueOf(list.get(position - 1).getTotal_quantity_storage())));
+            itemViewHolder.price.setText(decimalFormat.format(Double.valueOf(list.get(position - 1).getQuantity_safetystock())));
         }
     }
 

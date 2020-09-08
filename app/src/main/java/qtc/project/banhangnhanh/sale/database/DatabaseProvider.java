@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import qtc.project.banhangnhanh.sale.model.ListOrderModel;
 
 public class DatabaseProvider extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "POS";
+    public static final String DATABASE_NAME = "POSI";
     private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_NAME = "pos";
+    private static final String TABLE_NAME = "posi";
 
     private static final String KEY_ID = "id";
     private static final String KEY_CUSTOMER_ID = "customer_id";
@@ -22,6 +22,7 @@ public class DatabaseProvider extends SQLiteOpenHelper {
     private static final String KEY_PRICE = "priceProduct";
     private static final String KEY_INVENTORY = "inventory";
     private static final String KEY_TOTAL_STORAGE = "totalStore";
+    private static final String KEY_POSITION_ITEM = "position_item";
 
     public DatabaseProvider(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -29,7 +30,8 @@ public class DatabaseProvider extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String create_students_table = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT,%s TEXT,%s TEXT,%s TEXT)", TABLE_NAME, KEY_ID, KEY_CUSTOMER_ID, KEY_NAME, KEY_QUANTITY, KEY_PRICE, KEY_INVENTORY,KEY_TOTAL_STORAGE);
+        String create_students_table = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT)",
+                                                            TABLE_NAME, KEY_ID, KEY_CUSTOMER_ID, KEY_NAME, KEY_QUANTITY, KEY_PRICE, KEY_INVENTORY, KEY_TOTAL_STORAGE, KEY_POSITION_ITEM);
         db.execSQL(create_students_table);
     }
 
@@ -41,7 +43,7 @@ public class DatabaseProvider extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-        public void addNotes(ListOrderModel model) {
+    public void addNotes(ListOrderModel model) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_ID, model.getId());
@@ -51,6 +53,7 @@ public class DatabaseProvider extends SQLiteOpenHelper {
         values.put(KEY_PRICE, model.getPriceProduct());
         values.put(KEY_INVENTORY, model.getInventory());
         values.put(KEY_TOTAL_STORAGE, model.getTotalStore());
+        values.put(KEY_POSITION_ITEM, model.getPosition_item());
         //inserting new row
         db.insert(TABLE_NAME, null, values);
         //close database connection
@@ -100,7 +103,7 @@ public class DatabaseProvider extends SQLiteOpenHelper {
     public ArrayList<ListOrderModel> getNotes() {
         ArrayList<ListOrderModel> arrayList = new ArrayList<>();
         // select all query
-        String select_query = "SELECT *FROM " + TABLE_NAME;
+        String select_query = "SELECT * FROM " + TABLE_NAME;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(select_query, null);
@@ -115,6 +118,7 @@ public class DatabaseProvider extends SQLiteOpenHelper {
                 noteModel.setQuantityProduct(cursor.getString(3));
                 noteModel.setPriceProduct(cursor.getString(4));
                 noteModel.setInventory(cursor.getString(5));
+                noteModel.setPosition_item(cursor.getString(7));
                 arrayList.add(noteModel);
             } while (cursor.moveToNext());
         }

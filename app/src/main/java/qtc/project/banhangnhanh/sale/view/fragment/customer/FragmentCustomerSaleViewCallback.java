@@ -14,4 +14,6 @@ public interface FragmentCustomerSaleViewCallback {
     void callDataSearchCus(String toString);
 
     void callNav();
+
+    void loadMore();
 }

@@ -17,6 +17,7 @@ import java.util.Calendar;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.model.PackageInfoModel;
@@ -33,7 +34,7 @@ public class FragmentDonTraHangView extends BaseView<FragmentDonTraHangView.UICo
     public void init(HomeActivity activity, FragmentDonTraHangViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
     }
 

@@ -66,7 +66,7 @@ public class FragmentCreateLoHang extends BaseFragment<FragmentCreateLoHangViewI
             params.id_business = AppProvider.getPreferences().getUserModel().getId_business();
             params.type_manager = "create_package";
             params.product_id = id_product;
-            //params.id_code = infoModel.getPack_id_code();
+            params.id_code = infoModel.getPack_id_code();
             params.manufacturer_id = infoModel.getManufacturer_id();
             params.manufacturing_date = infoModel.getManufacturing_date();
             params.sale_price = infoModel.getSale_price();

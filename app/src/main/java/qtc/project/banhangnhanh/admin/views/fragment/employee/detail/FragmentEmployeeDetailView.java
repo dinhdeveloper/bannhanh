@@ -22,6 +22,7 @@ import java.util.Date;
 
 import b.laixuantam.myaarlibrary.base.BaseUiContainer;
 import b.laixuantam.myaarlibrary.base.BaseView;
+import b.laixuantam.myaarlibrary.helper.KeyboardUtils;
 import qtc.project.banhangnhanh.R;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.admin.adapter.employee.LevelEmployeeChooseAdapter;
@@ -41,7 +42,7 @@ public class FragmentEmployeeDetailView extends BaseView<FragmentEmployeeDetailV
     public void init(HomeActivity activity, FragmentEmployeeDetailViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
-
+        KeyboardUtils.setupUI(getView(),activity);
         onClick();
     }
 
@@ -168,7 +169,7 @@ public class FragmentEmployeeDetailView extends BaseView<FragmentEmployeeDetailV
                                     dialog.dismiss();
                                 }
                             });
-                        } else if (status == false){
+                        } else if (status == false) {
                             LayoutInflater layoutInflater = activity.getLayoutInflater();
                             View popupView = layoutInflater.inflate(R.layout.alert_dialog_waiting, null);
                             TextView title_text = popupView.findViewById(R.id.title_text);
@@ -184,7 +185,7 @@ public class FragmentEmployeeDetailView extends BaseView<FragmentEmployeeDetailV
                             AlertDialog dialog = alert.create();
                             dialog.setCanceledOnTouchOutside(false);
                             dialog.show();
-                            
+
                             cancel_button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -223,12 +224,16 @@ public class FragmentEmployeeDetailView extends BaseView<FragmentEmployeeDetailV
                         layout_update.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (new_pass.getText().toString().equals(re_new_pass.getText().toString())) {
-                                    if (callback != null) {
-                                        callback.reSetPass(model.getId_code(), re_new_pass.getText().toString(), id_employee);
+                                if (new_pass.length() < 6 && re_new_pass.length() < 6) {
+                                    Toast.makeText(activity, "Mật khẩu phải chứa ít nhất 6 ký tự.", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    if (new_pass.getText().toString().equals(re_new_pass.getText().toString())) {
+                                        if (callback != null) {
+                                            callback.reSetPass(model.getId_code(), re_new_pass.getText().toString(), id_employee);
+                                        }
+                                    } else {
+                                        Toast.makeText(activity, "Mật khẩu không khớp.", Toast.LENGTH_SHORT).show();
                                     }
-                                } else {
-                                    Toast.makeText(activity, "Mật khẩu không khớp.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -246,6 +251,7 @@ public class FragmentEmployeeDetailView extends BaseView<FragmentEmployeeDetailV
             Log.e("Exception", e.getMessage());
         }
     }
+
 
     @Override
     public void sendLevelEmployee(ArrayList<LevelEmployeeModel> arrayList) {
