@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="500dp"
+    android:background="@color/hinhnen"
+    android:id="@+id/popupFilter"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_toolbar_home"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingRight="8dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Filter"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginVertical="@dimen/dp20"
+            android:layout_marginHorizontal="@dimen/dp20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_marginHorizontal="@dimen/dp5"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Chọn ngày"
+                        android:textSize="@dimen/dp20"
+                        android:textColor="@color/dangnhap"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:background="@drawable/border_shape_white_layout_search_contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp">
+                        <TextView
+                            android:id="@+id/calendarFilter"
+                            android:layout_marginHorizontal="@dimen/dp10"
+                            android:hint="29-08-2020"
+                            android:textSize="@dimen/dp15"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <ImageView
+                            android:id="@+id/imageCalendar"
+                            android:layout_marginHorizontal="@dimen/dp10"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_button_calencar"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginHorizontal="@dimen/dp5"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Chọn giờ"
+                        android:textSize="@dimen/dp20"
+                        android:textColor="@color/dangnhap"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:orientation="horizontal"
+                        android:background="@drawable/border_shape_white_layout_search_contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp">
+                        <TextView
+                            android:id="@+id/hourFilter"
+                            android:background="@color/white"
+                            android:layout_marginHorizontal="@dimen/dp10"
+                            android:hint="09:00"
+                            android:textSize="@dimen/dp15"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginVertical="@dimen/dp20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="Mã đơn hàng"
+                    android:textSize="@dimen/dp20"
+                    android:textColor="@color/dangnhap"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="horizontal"
+                    android:background="@drawable/border_shape_white_layout_search_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp">
+                    <EditText
+                        android:id="@+id/idOrderFilter"
+                        android:background="@color/white"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:hint="MDH00138"
+                        android:textSize="@dimen/dp15"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:layout_marginBottom="30dp"
+            android:paddingBottom="@dimen/dp20"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/btnExit"
+                android:layout_marginHorizontal="@dimen/dp20"
+                android:layout_gravity="center"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/custom_background_edittext_password_login"
+                android:layout_width="160dp"
+                android:layout_height="40dp">
+                <TextView
+                    android:text="Hủy bỏ"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:textColor="@color/titleTabColor"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnSearch"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/dp20"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/custom_background_button_login"
+                android:layout_width="160dp"
+                android:layout_height="40dp">
+                <TextView
+                    android:text="Tìm kiếm"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:textColor="@color/titleTabColor"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutNone"
+    android:visibility="visible"
+    android:background="@color/hinhnen"
+    android:orientation="vertical"
+    tools:visibility="visible">
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:src="@drawable/ic_icons8_empty_box_1"
+            android:layout_width="110dp"
+            android:layout_height="120dp"/>
+
+        <TextView
+            android:id="@+id/tvTitleEmpty"
+            android:visibility="gone"
+            android:textColor="@color/medium_gray"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            tools:text="Không có kết quả !"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/tvContentTitleEmpty"
+            android:visibility="gone"
+            android:textColor="@color/medium_gray"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            tools:text="Không có kết quả !"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:visibility="visible"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

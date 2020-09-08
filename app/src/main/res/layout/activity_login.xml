@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:id="@+id/activityLogin"
+    android:background="@drawable/login_background"
+    tools:context=".activity.LoginActivity">
+
+<!--    <ImageView-->
+<!--        android:layout_marginVertical="@dimen/dp20"-->
+<!--        android:src="@drawable/ic_bg"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:gravity="center"
+            android:text="Đăng nhập"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="50dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_marginHorizontal="80dp"
+            android:background="@color/white"
+            android:layout_width="130dp"
+            android:layout_height="2sp"
+            android:layout_marginBottom="@dimen/dp10"/>
+        <ImageView
+            android:src="@drawable/ic_login"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp20"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/edtLoginIdShop"
+            android:text="ABCXYZ"
+            android:paddingHorizontal="5dp"
+            android:drawablePadding="@dimen/dp10"
+            android:layout_marginHorizontal="@dimen/dp10"
+            android:textColor="@color/white"
+            android:inputType="text"
+            android:hint="Mã cửa hàng"
+            android:textColorHint="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/custom_edittext_background_login_admin"
+            android:layout_marginVertical="@dimen/dp5"
+            android:layout_width="250dp"
+            android:layout_height="45dp"/>
+
+
+        <EditText
+            android:id="@+id/edtLoginName"
+            android:paddingHorizontal="5dp"
+            android:drawablePadding="@dimen/dp10"
+            android:layout_marginHorizontal="@dimen/dp10"
+            android:textColor="@color/white"
+            android:inputType="text"
+            android:hint="Tên đăng nhập"
+            android:textColorHint="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/custom_edittext_background_login_admin"
+            android:layout_marginVertical="@dimen/dp5"
+            android:layout_width="250dp"
+            android:layout_height="45dp"/>
+
+        <EditText
+            android:id="@+id/edtLoginPassowrd"
+            android:paddingHorizontal="5dp"
+            android:drawablePadding="@dimen/dp10"
+            android:textColor="@color/white"
+            android:inputType="textPassword"
+            android:gravity="center"
+            android:hint="Mật khẩu"
+            android:textColorHint="@color/white"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_edittext_background_login_admin"
+            android:layout_marginVertical="@dimen/dp10"
+            android:layout_width="250dp"
+            android:layout_height="45dp"/>
+
+        <LinearLayout
+            android:id="@+id/btnLoginButton"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_background_button_login"
+            android:layout_width="200dp"
+            android:layout_height="45dp">
+            <TextView
+                android:text="Đăng nhập"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:textColor="@color/titleTabColor"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

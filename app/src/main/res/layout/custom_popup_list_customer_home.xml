@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+        <TextView
+            android:text="Danh sách khách hàng"
+            android:layout_marginBottom="@dimen/dp20"
+            android:layout_gravity="center"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorAAA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="@dimen/dp20"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:id="@+id/layout_search"
+                android:paddingRight="@dimen/dp15"
+                android:layout_marginHorizontal="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/custom_background_search_level_detail"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/image_search"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/text_search"
+                    android:layout_weight="1"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:textColor="@color/colorText"
+                    android:gravity="start|center"
+                    android:hint="Lý Hiển Long, Trần..." />
+
+                <ImageView
+                    android:id="@+id/image_close"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_delete_circle" />
+            </LinearLayout>
+        </LinearLayout>
+        <!--end search-->
+
+        <TextView
+            android:id="@+id/tongkhachhang"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#91D5DA"
+            android:textSize="@dimen/dp15"
+            android:textStyle="italic|bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_list_customer"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"/>
+
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:paddingVertical="@dimen/dp20"
+            android:layout_gravity="center"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginRight="@dimen/dp15"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_weight="1"
+                android:id="@+id/btnExit"
+                android:background="@drawable/custom_background_edittext_password_login"
+                android:layout_width="160dp"
+                android:layout_height="40dp">
+                <TextView
+                    android:text="Từ chối"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:textColor="@color/titleTabColor"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnOk"
+                android:layout_marginLeft="@dimen/dp15"
+                android:layout_gravity="center"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_background_button_login"
+                android:layout_width="160dp"
+                android:layout_height="40dp">
+                <TextView
+                    android:text="Đồng ý"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:textColor="@color/titleTabColor"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:rv="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <b.laixuantam.myaarlibrary.widgets.roundview.RoundLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        rv:rv_backgroundColor="#ffffff"
+        rv:rv_strokeColor="@color/black"
+        rv:rv_strokeWidth="1dp"
+        tools:ignore="MissingPrefix">
+
+        <EditText
+            android:id="@+id/edtProductBarcodeDescription"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:ellipsize="end"
+            android:hint="Nhập mô tả"
+            android:imeOptions="actionNext"
+            android:inputType="textNoSuggestions|textMultiLine"
+            android:maxLines="2"
+            android:padding="10dp"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black" />
+
+        <EditText
+            android:id="@+id/edtProductBarcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:hint="Nhập barcode"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textSize="14sp" />
+
+    </b.laixuantam.myaarlibrary.widgets.roundview.RoundLinearLayout>
+
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/btnRemoveItem"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="10dp"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+</LinearLayout>

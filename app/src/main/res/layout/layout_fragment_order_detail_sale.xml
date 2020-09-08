@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/leveldata"
+    android:background="@color/hinhnen"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_header_detail"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_marginHorizontal="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10"
+            android:paddingVertical="@dimen/dp10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_weight="1"
+                android:text="Chi tiết đơn hàng:"
+                android:textSize="@dimen/dp20"
+                android:textStyle="bold"
+                android:textColor="@color/colorAAA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_marginHorizontal="@dimen/dp10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Mã khách hàng: "
+                        android:textColor="@color/colorAAA"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/dp15"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/idCustomer"
+                        android:layout_gravity="center"
+                        android:gravity="right"
+                        android:textColor="@color/text"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/dp15"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginHorizontal="@dimen/dp10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Mã nv tạo hóa đơn: "
+                        android:textColor="@color/colorAAA"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/dp15"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/idEmployee"
+                        android:layout_gravity="center"
+                        android:gravity="right"
+                        android:textColor="@color/text"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/dp15"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginHorizontal="@dimen/dp10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Mã đơn: "
+                        android:textColor="@color/colorAAA"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/dp15"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/idOrder"
+                        android:layout_gravity="center"
+                        android:gravity="right"
+                        android:textColor="@color/text"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/dp15"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_marginVertical="@dimen/dp10"
+                    android:background="@color/colorAAA"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutShow"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:visibility="visible">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_order_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <View
+                        android:id="@+id/viewer"
+                        android:layout_marginVertical="@dimen/dp10"
+                        android:background="@color/colorAAA"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/layoutpriceTemp"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="Tạm tính: "
+                            android:textColor="@color/colorCCC"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dp15"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/idPriceDemo"
+                            android:layout_gravity="center"
+                            android:gravity="right"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dp15"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutPriceSale"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="Tiền giảm: "
+                            android:textColor="@color/colorCCC"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dp15"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/priceSale"
+                            android:layout_gravity="center"
+                            android:gravity="right"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dp15"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutPriceTatal"
+                        android:layout_marginHorizontal="@dimen/dp10"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="Thành tiền: "
+                            android:textColor="@color/colorAAA"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dp20"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/allPrice"
+                            android:layout_gravity="center"
+                            android:gravity="right"
+                            android:textColor="@color/colorSuccess"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/dp15"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnExit"
+                        android:layout_marginVertical="@dimen/dp20"
+                        android:layout_marginTop="30dp"
+                        android:layout_gravity="center"
+                        android:layout_alignParentBottom="true"
+                        android:background="@drawable/custom_background_button_login"
+                        android:layout_width="160dp"
+                        android:layout_height="40dp">
+                        <TextView
+                            android:text="Hủy đơn này"
+                            android:textStyle="bold"
+                            android:textSize="12dp"
+                            android:textColor="@color/titleTabColor"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
+
+</LinearLayout>

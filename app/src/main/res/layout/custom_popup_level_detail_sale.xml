@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/hinhnen"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_header_detail"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:elevation="2dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/xemchitiet"
+            android:layout_marginTop="@dimen/dp15"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/dp20"
+                android:text="Xem chi tiết"
+                android:textColor="@color/colorAAA"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/xemchitiet"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="@dimen/dp20"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/layout_search"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/custom_background_search_level_detail"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/dp15">
+
+                <ImageView
+                    android:id="@+id/image_search"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/edit_filter"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="start|center"
+                    android:hint="Lý Hiển Long, Trần..."
+                    android:textColor="@color/colorText" />
+
+                <ImageView
+                    android:id="@+id/image_close"
+                    android:padding="@dimen/dp5"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_delete_noti" />
+            </LinearLayout>
+        </LinearLayout>
+        <!--end search-->
+
+        <TextView
+            android:id="@+id/tongkhachhang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#2BB5D1"
+            android:textSize="@dimen/dp15"
+            android:textStyle="italic|bold" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_list_customer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tongkhachhang" />
+
+    </RelativeLayout>
+
+</LinearLayout>
