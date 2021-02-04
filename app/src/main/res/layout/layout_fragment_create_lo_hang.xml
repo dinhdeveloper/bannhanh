@@ -51,7 +51,7 @@
                             android:gravity="center"
                             android:text="Thêm mới lô hàng"
                             android:textColor="@color/white"
-                            android:textSize="20dp"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
 
                         <ImageView

@@ -45,12 +45,12 @@
                             android:id="@+id/name_level_customer_header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="Chi tiết đơn hàng của KH"
                             android:textColor="@color/white"
-                            android:textSize="20dp"
+                            android:layout_gravity="center"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
 
                         <ImageView

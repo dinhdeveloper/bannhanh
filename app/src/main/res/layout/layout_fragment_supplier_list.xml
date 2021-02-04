@@ -42,7 +42,7 @@
                     android:gravity="center"
                     android:text="Danh sách nhà cung ứng"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView

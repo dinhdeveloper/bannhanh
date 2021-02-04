@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
     <View
-        android:background="@color/black"
+        android:background="@color/color_text_booking_form"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
 

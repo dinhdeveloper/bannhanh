@@ -32,6 +32,8 @@ public class FragmentHomeView extends BaseView<FragmentHomeView.UIContainer> imp
     public void init(HomeActivity activity, FragmentHomeViewCallback callback) {
         this.activity = activity;
         this.callback = callback;
+        ui.imageNavLeft.setImageResource(R.drawable.ic_menu_24);
+        ui.titleHeader.setText("Trang Chủ");
         ui.tvStore_end.setText("Hết hạn: "+ ConvertDate.changeToNiceFormatDate(AppProvider.getPreferences().getUserModel().getStore_end()));
         onClickItem();
     }
@@ -40,48 +42,48 @@ public class FragmentHomeView extends BaseView<FragmentHomeView.UIContainer> imp
         ui.layoutQLSP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.addFragment(new FragmentProduct(), true, null);
+                activity.replaceFragment(new FragmentProduct(), true, null);
             }
         });
         ui.layoutQLCDKH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.addFragment(new FragmentLevelCustomer(), true, null);
+                activity.replaceFragment(new FragmentLevelCustomer(), true, null);
             }
         });
 
         ui.layoutQLKH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.addFragment(new FragmentCustomer(), true, null);
+                activity.replaceFragment(new FragmentCustomer(), true, null);
             }
         });
 
         ui.layoutQLNCU.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.addFragment(new FragmentSupplierManager(), true, null);
+                activity.replaceFragment(new FragmentSupplierManager(), true, null);
             }
         });
 
         ui.layoutQLNV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.addFragment(new FragmentEmployeeManager(), true, null);
+                activity.replaceFragment(new FragmentEmployeeManager(), true, null);
             }
         });
 
         ui.layoutQLDH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.addFragment(new FragmentOrderManager(), true, null);
+                activity.replaceFragment(new FragmentOrderManager(), true, null);
             }
         });
 
         ui.layoutQLTK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.addFragment(new FragmentReportManager(), true, null);
+                activity.replaceFragment(new FragmentReportManager(), true, null);
             }
         });
         ui.layoutCCDX.setOnClickListener(new View.OnClickListener() {
@@ -117,8 +119,15 @@ public class FragmentHomeView extends BaseView<FragmentHomeView.UIContainer> imp
     }
 
     public static class UIContainer extends BaseUiContainer {
+        @UiElement(R.id.imageNavLeft)
+        public ImageView imageNavLeft;
+
+        @UiElement(R.id.titleHeader)
+        public TextView titleHeader;
+
         @UiElement(R.id.layoutQLSP)
         public LinearLayout layoutQLSP;
+
         @UiElement(R.id.layoutQLKH)
         public LinearLayout layoutQLKH;
 
@@ -140,8 +149,6 @@ public class FragmentHomeView extends BaseView<FragmentHomeView.UIContainer> imp
         @UiElement(R.id.layoutCCDX)
         public LinearLayout layoutCCDX;
 
-        @UiElement(R.id.imageNavLeft)
-        public ImageView imageNavLeft;
 
         @UiElement(R.id.tvStore_end)
         public TextView tvStore_end;

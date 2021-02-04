@@ -41,7 +41,7 @@
                     android:gravity="center"
                     android:text="Báo cáo xuất nhập kho"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView

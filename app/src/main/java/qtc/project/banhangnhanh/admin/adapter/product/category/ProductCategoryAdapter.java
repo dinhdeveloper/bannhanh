@@ -1,6 +1,7 @@
 package qtc.project.banhangnhanh.admin.adapter.product.category;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Filter;
@@ -41,7 +42,7 @@ public class ProductCategoryAdapter extends SuperAdapter<ProductCategoryModel> {
 
     @Override
     public void onBind(SuperViewHolder holder, int viewType, int layoutPosition, ProductCategoryModel item) {
-        LinearLayout item_category_product = holder.findViewById(R.id.item_category_product);
+        CardView item_category_product = holder.findViewById(R.id.item_category_product);
         ImageView image_product = holder.findViewById(R.id.image_product);
         TextView name_product_category = holder.findViewById(R.id.name_product_category);
         TextView description_product = holder.findViewById(R.id.description_product);

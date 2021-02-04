@@ -42,7 +42,7 @@
                     android:gravity="center"
                     android:text="Báo cáo thống kê kho"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_marginHorizontal="@dimen/dp20"
-                android:textSize="@dimen/dp20"
+                android:textSize="18sp"
                 android:layout_weight="1"
                 android:text="Báo cáo xuất nhập kho"
                 android:textStyle="bold"
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_marginHorizontal="@dimen/dp20"
-                android:textSize="@dimen/dp20"
+                android:textSize="18sp"
                 android:layout_weight="1"
                 android:text="Báo cáo an toàn kho"
                 android:textStyle="bold"
@@ -126,7 +126,7 @@
 
             <TextView
                 android:layout_marginHorizontal="@dimen/dp20"
-                android:textSize="@dimen/dp20"
+                android:textSize="18sp"
                 android:layout_weight="1"
                 android:text="Thống kê tồn kho so với doanh thu"
                 android:textStyle="bold"

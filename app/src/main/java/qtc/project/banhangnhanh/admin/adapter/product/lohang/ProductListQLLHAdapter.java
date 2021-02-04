@@ -1,6 +1,7 @@
 package qtc.project.banhangnhanh.admin.adapter.product.lohang;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +34,7 @@ public class ProductListQLLHAdapter extends SuperAdapter<ProductListModel> {
 
     @Override
     public void onBind(SuperViewHolder holder, int viewType, int layoutPosition, ProductListModel item) {
-        LinearLayout layout_item = holder.findViewById(R.id.layout_item);
+        CardView layout_item = holder.findViewById(R.id.layout_item);
         ImageView image_product = holder.findViewById(R.id.image_product);
         TextView id_product = holder.findViewById(R.id.id_product);
         TextView name_product = holder.findViewById(R.id.name_product);

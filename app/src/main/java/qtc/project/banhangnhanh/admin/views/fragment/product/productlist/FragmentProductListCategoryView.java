@@ -38,6 +38,7 @@ public class FragmentProductListCategoryView extends BaseView<FragmentProductLis
         this.activity = activity;
         this.callback = callback;
         KeyboardUtils.setupUI(getView(),activity);
+        ui.titleHeader.setText("Danh sách sản phẩm");
         onClick();
         initRecyclerview();
 
@@ -206,6 +207,8 @@ public class FragmentProductListCategoryView extends BaseView<FragmentProductLis
         });
 
         //tao moi san pham
+        setVisible(ui.image_create);
+        ui.image_create.setImageResource(R.drawable.ic_baseline_add_while_24);
         ui.image_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,6 +244,9 @@ public class FragmentProductListCategoryView extends BaseView<FragmentProductLis
         @UiElement(R.id.imageNavLeft)
         public ImageView imageNavLeft;
 
+        @UiElement(R.id.titleHeader)
+        public TextView titleHeader;
+
         @UiElement(R.id.image_filter)
         public ImageView image_filter;
 
@@ -265,7 +271,7 @@ public class FragmentProductListCategoryView extends BaseView<FragmentProductLis
         @UiElement(R.id.close_layout)
         public ImageView close_layout;
 
-        @UiElement(R.id.image_create)
+        @UiElement(R.id.imvEdit)
         public ImageView image_create;
 
 

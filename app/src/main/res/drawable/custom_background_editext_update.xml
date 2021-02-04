@@ -5,8 +5,8 @@
     <solid android:color="@color/hinhnen"/>
     <stroke
         android:width="2dp"
-        android:color="@color/black" />
+        android:color="@color/contentTextHintColorDarker" />
 
-    <corners android:radius="@dimen/dp5"/>
+    <corners android:radius="2dp"/>
 
 </shape>

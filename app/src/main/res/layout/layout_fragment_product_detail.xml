@@ -45,7 +45,7 @@
                     android:gravity="center"
                     android:text="Chi tiết sản phẩm"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView

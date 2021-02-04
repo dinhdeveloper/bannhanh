@@ -43,7 +43,7 @@
                     android:gravity="center"
                     android:text="Quản lý thống kê- báo cáo"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -69,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp">
                 <TextView
-                    android:textSize="@dimen/dp20"
+                    android:textSize="18sp"
                     android:textColor="@color/white"
                     android:text="Danh sách thống kê- báo cáo"
                     android:textStyle="bold"
@@ -113,7 +113,8 @@
 
                 <TextView
                     android:layout_marginHorizontal="@dimen/dp20"
-                    android:textSize="@dimen/dp20"
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
                     android:layout_weight="1"
                     android:text="Báo cáo thống kê kho"
                     android:textStyle="bold"
@@ -147,7 +148,8 @@
 
                 <TextView
                     android:layout_marginHorizontal="@dimen/dp20"
-                    android:textSize="@dimen/dp20"
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
                     android:layout_weight="1"
                     android:text="Báo cáo thống kê bán hàng"
                     android:textStyle="bold"

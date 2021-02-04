@@ -34,6 +34,7 @@ import b.laixuantam.myaarlibrary.base.BaseParameters;
 import b.laixuantam.myaarlibrary.helper.AccentRemove;
 import b.laixuantam.myaarlibrary.helper.CurrencyFormater;
 import b.laixuantam.myaarlibrary.widgets.dialog.alert.KAlertDialog;
+import b.laixuantam.myaarlibrary.widgets.ultils.ConvertDate;
 import qtc.project.banhangnhanh.activity.HomeActivity;
 import qtc.project.banhangnhanh.activity.LoginActivity;
 import qtc.project.banhangnhanh.activity.SaleHomeActivity;
@@ -341,9 +342,13 @@ public class FragmentSaleHome extends BaseFragment<FragmentSaleHomeViewInterface
             outputStream.write(printformat);
             //printPhoto(R.drawable.company);
             printNewLine();
+            String store = null;
             if (!TextUtils.isEmpty(model.getStore_name())) {
-                printCustom(model.getStore_name(), 3, 1);
+                store = AccentRemove.removeAccent(model.getStore_name());
+            }else {
+                store = "QTC TEK";
             }
+            printCustom(store, 3, 1);
             printNewLine();
             printCustom(AccentRemove.removeAccent(model.getStore_address()), 0, 1);
             printCustom("Hot Line: " + model.getStore_phone(), 0, 1);
@@ -361,7 +366,17 @@ public class FragmentSaleHome extends BaseFragment<FragmentSaleHomeViewInterface
             int month = c.get(Calendar.MONTH) + 1;
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            printCustom("Ngay: " + day + "/" + month + "/" + year + " " + dateTime[1], 1, 0);
+            //2021-01-08 11:48:18
+            String date_create = year+"-"+month+"-"+day+" "+dateTime[1];
+            if (!TextUtils.isEmpty(date_create)) {
+                String[] arrDateTimeCreated = date_create.split(" ");
+                String dateCreated = null;
+                if (arrDateTimeCreated != null && arrDateTimeCreated.length > 0) {
+                    dateCreated = ConvertDate.changeToNiceFormatDate(arrDateTimeCreated[0]);
+                    printCustom(dateCreated + " " + arrDateTimeCreated[1], 1, 0);
+                }
+            }
+
             printCustom("Ma Don Hang :" + listHoanTat.get(0).getOrder_id_code(), 1, 0);
             printCustom("Nhan Vien: " + AccentRemove.removeAccent(AppProvider.getPreferences().getUserModel().getFull_name()), 1, 0);
             if (id_customer != null) {
@@ -396,7 +411,7 @@ public class FragmentSaleHome extends BaseFragment<FragmentSaleHomeViewInterface
             }
             long tien_giam = ((phantram_giamgia * thanhtien) / 100);
 
-            printCustom("Tong Cong: " + decimalFormat.format(thanhtien), 1, 0);
+            printCustom("\nTong Cong: " + decimalFormat.format(thanhtien), 1, 0);
             printNewLine();
             printCustom("Giam Gia: " + decimalFormat.format(tien_giam), 1, 0);
             printNewLine();

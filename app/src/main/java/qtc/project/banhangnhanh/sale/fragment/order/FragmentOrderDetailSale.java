@@ -136,10 +136,12 @@ public class FragmentOrderDetailSale extends BaseFragment<FragmentOrderDetailSal
     @Override
     public void reQuestData() {
     }
+
     OrderModel modelLocal;
     ArrayList<OrderDetailModel> detailModelsLocal;
     float tiengiamLocal;
     EmployeeModel employeeModel;
+
     @Override
     public void inBill(OrderModel model, ArrayList<OrderDetailModel> detailModels, float tiengiam) {
         this.modelLocal = model;
@@ -149,7 +151,7 @@ public class FragmentOrderDetailSale extends BaseFragment<FragmentOrderDetailSal
             Intent BTIntent = new Intent(activity, BTDeviceList.class);
             this.startActivityForResult(BTIntent, BTDeviceList.REQUEST_CONNECT_BT);
         } else {
-            doInBill(model,detailModels,tiengiam);
+            doInBill(model, detailModels, tiengiam);
         }
     }
 
@@ -177,25 +179,32 @@ public class FragmentOrderDetailSale extends BaseFragment<FragmentOrderDetailSal
             //printPhoto(R.drawable.company);
             printNewLine();
             printNewLine();
-            printCustom(employeeModel.getStore_name(), 3, 1);
+            String store = null;
+            if (!TextUtils.isEmpty(employeeModel.getStore_name())) {
+                store = AccentRemove.removeAccent(employeeModel.getStore_name());
+            } else {
+                store = "QTC TEK";
+            }
+            printCustom(store, 3, 1);
             printNewLine();
             printCustom(AccentRemove.removeAccent(employeeModel.getStore_address()), 0, 1);
-            printCustom("Hot Line: "+employeeModel.getStore_phone(), 0, 1);
+            printCustom("Hot Line: " + employeeModel.getStore_phone(), 0, 1);
             printCustom("-~-~-~-~-~-~-~-~-~-~-", 0, 1);
             printNewLine();
             printCustom("PHIEU THANH TOAN", 1, 1);
             printNewLine();
             printCustom("-~-~-~-~-~-~-~-~-~-~-", 0, 1);
             printNewLine();
-            String dateTime[] = getDateTime();
-            Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
 
-            // Trả về giá trị từ 0 - 11
-            int month = c.get(Calendar.MONTH) + 1;
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            printCustom("Ngay: " + ConvertDate.changeToNiceFormatDate(model.getOrder_created_date()), 1, 0);
+            //printCustom("Ngay: " + ConvertDate.changeToNiceFormatDate(model.getOrder_created_date()), 1, 0);
+            if (!TextUtils.isEmpty(model.getOrder_created_date())) {
+                String[] arrDateTimeCreated = model.getOrder_created_date().split(" ");
+                String dateCreated = null;
+                if (arrDateTimeCreated != null && arrDateTimeCreated.length > 0) {
+                    dateCreated = ConvertDate.changeToNiceFormatDate(arrDateTimeCreated[0]);
+                    printCustom(dateCreated + " " + arrDateTimeCreated[1], 1, 0);
+                }
+            }
             printCustom("Ma Don Hang :" + model.getOrder_id_code(), 1, 0);
             //printCustom("Nhan Vien: " + AccentRemove.removeAccent(AppProvider.getPreferences().getUserModel().getFull_name()), 1, 0);
             if (!TextUtils.isEmpty(model.getEmployee_fullname())) {
@@ -222,13 +231,12 @@ public class FragmentOrderDetailSale extends BaseFragment<FragmentOrderDetailSal
 //                    printCustom(Consts.decimalFormat.format(Long.valueOf(temp)), 0, 2);
                 printNewLine();
             }
-            printCustom("-----------------------", 0, 1);
             long phantram_phaitra = (Long.valueOf(model.getOrder_total()) * 100) / allPrice;
-            long phantram_giamgia = 100 - phantram_phaitra;
+            //long phantram_giamgia = 100 - phantram_phaitra;
 
-            long tien_giam = ((phantram_giamgia * allPrice) / 100);
             long tien_giam_tt = Long.valueOf(model.getOrder_direct_discount());
-            printCustom("Tong Cong: " + decimalFormat.format(allPrice), 1, 0);
+            long tien_giam = allPrice - Long.valueOf(model.getOrder_direct_discount()) - Long.valueOf(model.getOrder_total());
+            printCustom("\nTong Cong: " + decimalFormat.format(allPrice), 1, 0);
             printNewLine();
             printCustom("Giam Gia: " + decimalFormat.format(tien_giam), 1, 0);
             printNewLine();
@@ -272,7 +280,7 @@ public class FragmentOrderDetailSale extends BaseFragment<FragmentOrderDetailSal
             @Override
             public void run() {
                 if (btsocket != null) {
-                    doInBill(modelLocal,detailModelsLocal,tiengiamLocal);
+                    doInBill(modelLocal, detailModelsLocal, tiengiamLocal);
                     dismissProgress();
                 }
             }

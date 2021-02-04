@@ -112,8 +112,9 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/dp20"
-                    android:textSize="@dimen/dp20"
+                    android:textSize="18sp"
                     android:layout_weight="1"
                     android:text="Danh mục sản phẩm"
                     android:textStyle="bold"
@@ -146,8 +147,9 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/dp20"
-                    android:textSize="@dimen/dp20"
+                    android:textSize="18sp"
                     android:layout_weight="1"
                     android:text="Danh sách sản phẩm"
                     android:textStyle="bold"
@@ -180,8 +182,9 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/dp20"
-                    android:textSize="@dimen/dp20"
+                    android:textSize="18sp"
                     android:layout_weight="1"
                     android:text="Quản lý lô hàng"
                     android:textStyle="bold"
@@ -214,8 +217,9 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/dp20"
-                    android:textSize="@dimen/dp20"
+                    android:textSize="18sp"
                     android:layout_weight="1"
                     android:text="Đổi trả hàng hóa"
                     android:textStyle="bold"
@@ -249,8 +253,9 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/dp20"
-                    android:textSize="@dimen/dp20"
+                    android:textSize="18sp"
                     android:layout_weight="1"
                     android:text="Sản phẩm vô hiệu hóa"
                     android:textStyle="bold"

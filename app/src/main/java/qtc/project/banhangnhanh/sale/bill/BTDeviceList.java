@@ -244,7 +244,7 @@ public class BTDeviceList extends ListActivity implements GoogleApiClient.Connec
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             Toast.makeText(getApplicationContext(),
-                    "Bluetooth not supported!!", Toast.LENGTH_LONG).show();
+                    "Bluetooth không hỗ trợ!!", Toast.LENGTH_LONG).show();
             return -1;
         }
 
@@ -267,7 +267,7 @@ public class BTDeviceList extends ListActivity implements GoogleApiClient.Connec
         }
 
         Toast.makeText(getApplicationContext(),
-                "Getting all available Bluetooth Devices", Toast.LENGTH_SHORT)
+                "Tìm tất cả thiết bị ", Toast.LENGTH_SHORT)
                 .show();
 
         return 0;
@@ -374,7 +374,7 @@ public class BTDeviceList extends ListActivity implements GoogleApiClient.Connec
 
         Toast.makeText(
                 getApplicationContext(),
-                "Connecting to " + btDevices.getItem(position).getName() + ","
+                "Kết nối " + btDevices.getItem(position).getName() + ","
                         + btDevices.getItem(position).getAddress(),
                 Toast.LENGTH_SHORT).show();
 
@@ -422,7 +422,7 @@ public class BTDeviceList extends ListActivity implements GoogleApiClient.Connec
         @Override
         public void run() {
             Toast.makeText(getApplicationContext(),
-                    "Cannot establish connection", Toast.LENGTH_SHORT).show();
+                    "Không thể thiết lập kết nối", Toast.LENGTH_SHORT).show();
             mBluetoothAdapter.startDiscovery();
 
         }
@@ -434,7 +434,7 @@ public class BTDeviceList extends ListActivity implements GoogleApiClient.Connec
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        menu.add(0, Menu.FIRST, Menu.NONE, "Refresh Scanning");
+        menu.add(0, Menu.FIRST, Menu.NONE, "Làm mới");
 
         return true;
     }

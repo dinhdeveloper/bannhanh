@@ -35,7 +35,7 @@
                     android:src="@drawable/ic_back_24" />
 
                 <TextView
-                    android:id="@+id/title_header"
+                    android:id="@+id/titleHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

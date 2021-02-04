@@ -46,7 +46,7 @@
                         android:gravity="center"
                         android:text="Quản lý cấp độ khách hàng"
                         android:textColor="@color/white"
-                        android:textSize="20dp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <ImageView
@@ -72,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp">
                     <TextView
-                        android:textSize="@dimen/dp20"
+                        android:textSize="18sp"
                         android:textColor="@color/white"
                         android:text="Danh sách quản lý cấp độ khách hàng"
                         android:textStyle="bold"
