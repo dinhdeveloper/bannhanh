@@ -165,7 +165,7 @@ public class FragmentOrderDetailSaleView extends BaseView<FragmentOrderDetailSal
         @UiElement(R.id.imageNavLeft)
         public ImageView imageNavLeft;
 
-        @UiElement(R.id.title_header)
+        @UiElement(R.id.titleHeader)
         public TextView title_header;
 
         @UiElement(R.id.imvHome)

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ import qtc.project.banhangnhanh.sale.view.fragment.order.detail.FragmentOrderDet
 import qtc.project.banhangnhanh.sale.view.fragment.order.detail.FragmentOrderDetailSaleViewCallback;
 import qtc.project.banhangnhanh.sale.view.fragment.order.detail.FragmentOrderDetailSaleViewInterface;
 
+import static android.text.Html.fromHtml;
 import static qtc.project.banhangnhanh.helper.Consts.decimalFormat;
 
 public class FragmentOrderDetailSale extends BaseFragment<FragmentOrderDetailSaleViewInterface, BaseParameters> implements FragmentOrderDetailSaleViewCallback {
@@ -233,6 +235,10 @@ public class FragmentOrderDetailSale extends BaseFragment<FragmentOrderDetailSal
             }
             long phantram_phaitra = (Long.valueOf(model.getOrder_total()) * 100) / allPrice;
             //long phantram_giamgia = 100 - phantram_phaitra;
+            //todo test in gach chan
+            final String gachChan = String.valueOf(Html.fromHtml("<del>" + 100000 + "</del>"));
+
+            printCustom("aa: "+gachChan, 1, 0);
 
             long tien_giam_tt = Long.valueOf(model.getOrder_direct_discount());
             long tien_giam = allPrice - Long.valueOf(model.getOrder_direct_discount()) - Long.valueOf(model.getOrder_total());
@@ -408,7 +414,9 @@ public class FragmentOrderDetailSale extends BaseFragment<FragmentOrderDetailSal
         super.onDestroy();
         try {
             if (btsocket != null) {
-                outputStream.close();
+                if (outputStream != null) {
+                    outputStream.close();
+                }
                 btsocket.close();
                 btsocket = null;
             }
